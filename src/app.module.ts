@@ -1,9 +1,8 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { ProcedureDocumentsModule } from './procedure-documents/procedure-documents.module';
+import { BreakdownsModule } from './breakdowns-unit/breakdowns-units.module';
 
 @Module({
   imports: [
@@ -19,8 +18,9 @@ import { ProcedureDocumentsModule } from './procedure-documents/procedure-docume
       synchronize: true,
     }),
     ProcedureDocumentsModule,
+    BreakdownsModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}
