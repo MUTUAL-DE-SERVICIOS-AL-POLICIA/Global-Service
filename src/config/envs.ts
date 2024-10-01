@@ -4,17 +4,26 @@ import * as joi from 'joi';
 interface EnvVars {
   PORT: number;
   NATS_SERVERS: string[];
-  DB_TEST_PASSWORD: string;
-  DB_TEST_NAME: string;
-  DB_TEST_HOST: string;
-  DB_TEST_PORT: number;
-  DB_TEST_USERNAME: string;
+  DB_PASSWORD: string;
+  DB_DATABASE: string;
+  DB_HOST: string;
+  DB_PORT: number;
+  DB_USERNAME: string;
+  DB_AUTO_LOAD_ENTITIES: boolean;
+  DB_SYNCHRONIZE: boolean;
 }
 
 const envsSchema = joi
   .object({
     PORT: joi.number().required(),
     NATS_SERVERS: joi.array().items(joi.string()).required(),
+    DB_PASSWORD: joi.string().required(),
+    DB_DATABASE: joi.string().required(),
+    DB_HOST: joi.string().required(),
+    DB_PORT: joi.number().required(),
+    DB_USERNAME: joi.string().required(),
+    DB_AUTO_LOAD_ENTITIES: joi.boolean().default(true),
+    DB_SYNCHRONIZE: joi.boolean().default(false),
   })
   .unknown(true);
 
@@ -32,9 +41,11 @@ const envVars: EnvVars = value;
 export const envs = {
   port: envVars.PORT,
   natsServers: envVars.NATS_SERVERS,
-  dbTestPassword: envVars.DB_TEST_PASSWORD,
-  dbTestName: envVars.DB_TEST_NAME,
-  dbTestHost: envVars.DB_TEST_HOST,
-  dbTestPort: envVars.DB_TEST_PORT,
-  dbTestUsername: envVars.DB_TEST_USERNAME,
+  dbPassword: envVars.DB_PASSWORD,
+  dbDatabase: envVars.DB_DATABASE,
+  dbHost: envVars.DB_HOST,
+  dbPort: envVars.DB_PORT,
+  dbUsername: envVars.DB_USERNAME,
+  dbAutoLoadEntities: envVars.DB_AUTO_LOAD_ENTITIES,
+  dbSynchronize: envVars.DB_SYNCHRONIZE,
 };
