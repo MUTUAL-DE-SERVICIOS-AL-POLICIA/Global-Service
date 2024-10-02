@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { Unit } from './unit.entity';
 
 @Entity({ schema: 'public', name: 'breakdowns', synchronize: false })
 export class Breakdown {
@@ -10,4 +11,7 @@ export class Breakdown {
 
   @Column()
   name: string;
+
+  @OneToMany(() => Unit, (units) => units.breakdown)
+  units: Breakdown[];
 }

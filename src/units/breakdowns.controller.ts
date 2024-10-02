@@ -1,4 +1,4 @@
-import { Controller } from '@nestjs/common';
+import { Controller, ParseIntPipe } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { BreakdownsService } from './breakdowns.service';
 
@@ -6,13 +6,13 @@ import { BreakdownsService } from './breakdowns.service';
 export class BreakdownsController {
   constructor(private readonly breakdownsService: BreakdownsService) {}
 
-  @MessagePattern('findAllBreakdowns')
+  @MessagePattern('breakdowns.findAll')
   findAll() {
     return this.breakdownsService.findAll();
   }
 
-  @MessagePattern('findOneBreakdown')
-  findOne(@Payload() id: number) {
+  @MessagePattern('breakdowns.findOne')
+  findOne(@Payload('id', ParseIntPipe) id: number) {
     return this.breakdownsService.findOne(id);
   }
 }
