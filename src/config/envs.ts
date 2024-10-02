@@ -38,9 +38,16 @@ if (error) {
 
 const envVars: EnvVars = value;
 
-export const envs = {
+//Configuración del puerto de micro servicio
+export const PortEnvs = {
   port: envVars.PORT,
+};
+//Configuración con el servidor
+export const NastEnvs = {
   natsServers: envVars.NATS_SERVERS,
+};
+//Configuración con la base de datos principal
+export const DbEnvs = {
   dbPassword: envVars.DB_PASSWORD,
   dbDatabase: envVars.DB_DATABASE,
   dbHost: envVars.DB_HOST,

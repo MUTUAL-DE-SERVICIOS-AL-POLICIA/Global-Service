@@ -2,25 +2,26 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { ProcedureDocumentsModule } from './procedure-documents/procedure-documents.module';
-import { BreakdownsModule } from './breakdowns-unit/breakdowns-units.module';
+import { UnitsModule } from './units/config.module';
+import { DegreesModule } from './degrees/degrees.module';
+import { DbEnvs } from './config';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: process.env.DB_HOST,
-      port: +process.env.DB_PORT,
-      database: process.env.DB_NAME,
-      username: process.env.DB_USERNAME,
-      password: process.env.DB_PASSWORD,
-      autoLoadEntities: true,
-      synchronize: true,
+      host: DbEnvs.dbHost,
+      port: DbEnvs.dbPort,
+      database: DbEnvs.dbDatabase,
+      username: DbEnvs.dbUsername,
+      password: DbEnvs.dbPassword,
+      autoLoadEntities: DbEnvs.dbAutoLoadEntities,
+      synchronize: DbEnvs.dbSynchronize,
     }),
     ProcedureDocumentsModule,
-    BreakdownsModule,
+    UnitsModule,
+    DegreesModule,
   ],
-  controllers: [],
-  providers: [],
 })
 export class AppModule {}
