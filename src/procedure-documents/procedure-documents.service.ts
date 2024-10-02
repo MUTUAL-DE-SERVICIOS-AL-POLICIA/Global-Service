@@ -10,7 +10,6 @@ export class ProcedureDocumentsService {
     @InjectRepository(ProcedureDocument)
     private readonly procedureDocumentsRepository: Repository<ProcedureDocument>,
   ) {}
-  //Mostrar todos los documentos, nombre y ultima actualización
   async findAll(): Promise<Partial<ProcedureDocument>[]> {
     return this.procedureDocumentsRepository.find({
       select: ['name', 'updated_at'],
