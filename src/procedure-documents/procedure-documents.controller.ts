@@ -17,4 +17,9 @@ export class ProcedureDocumentsController {
   findOne(@Payload('id', ParseIntPipe) id: number) {
     return this.procedureDocumentsService.findOne(id);
   }
+
+  @MessagePattern('procedureDocuments.findAllByIds')
+  async findAllByIds(data: { ids: number[] }): Promise<Record<number, string>> {
+    return this.procedureDocumentsService.findAllByIds(data.ids);
+  }
 }
