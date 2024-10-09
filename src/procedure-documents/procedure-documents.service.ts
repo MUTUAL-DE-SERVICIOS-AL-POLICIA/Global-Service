@@ -1,6 +1,6 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { ProcedureDocument } from './entities/procedure-document.entity';
 
 @Injectable()
@@ -26,4 +26,18 @@ export class ProcedureDocumentsService {
 
     return procedureDocument;
   }
+
+  async findAllByIds(ids: number[]): Promise<Record<number, string>> {
+    const documents = await this.procedureDocumentsRepository.findBy({
+      id: In(ids),
+    });
+
+    const result = documents.reduce((acc: Record<number, string>, doc) => {
+      acc[doc.id] = doc.name;
+      return acc;
+    }, {});
+  
+    return result;
+  }
+  
 }
