@@ -36,8 +36,7 @@ export class ProcedureDocumentsService {
       acc[doc.id] = doc.name;
       return acc;
     }, {});
-  
+
     return result;
   }
-  
 }
