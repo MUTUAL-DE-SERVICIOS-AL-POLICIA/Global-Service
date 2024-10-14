@@ -6,6 +6,7 @@ import { UnitsModule } from './units/units.module';
 import { DegreesModule } from './degrees/degrees.module';
 import { DbEnvs } from './config';
 import { CategoriesModule } from './categories/categories.module';
+import { KinshipsModule } from './kinships/kinships.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { CategoriesModule } from './categories/categories.module';
     UnitsModule,
     DegreesModule,
     CategoriesModule,
+    KinshipsModule,
   ],
 })
 export class AppModule {}
