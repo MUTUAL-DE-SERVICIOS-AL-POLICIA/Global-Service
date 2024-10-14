@@ -1,7 +1,7 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Unit } from './entities';
+import { Breakdown, Unit } from './entities';
 
 @Injectable()
 export class UnitsService {
@@ -9,18 +9,37 @@ export class UnitsService {
   constructor(
     @InjectRepository(Unit)
     private readonly unitsRepository: Repository<Unit>,
+    private readonly breakdownsRepository: Repository<Breakdown>,
   ) {}
-  async findAll(): Promise<Partial<Unit>[]> {
+  async findAllUnits(): Promise<Partial<Unit>[]> {
     return this.unitsRepository.find({
       select: ['code', 'name'],
     });
   }
 
-  async findOne(id: number): Promise<Unit> {
+  async findOneUnit(id: number): Promise<Unit> {
     const unit = await this.unitsRepository.findOneBy({ id });
 
     if (!unit) throw new NotFoundException(`Unit with: ${id} not found`);
 
     return unit;
+  }
+
+  async findAllBreakdowns(): Promise<Partial<Breakdown>[]> {
+    return this.breakdownsRepository.find({
+      select: ['code', 'name'],
+    });
+  }
+
+  async findOneBreakdown(id: number): Promise<Breakdown> {
+    const breakdown = await this.breakdownsRepository.findOne({
+      where: { id },
+      relations: ['units'],
+    });
+
+    if (!breakdown)
+      throw new NotFoundException(`breakdowns with: ${id} not found`);
+
+    return breakdown;
   }
 }
