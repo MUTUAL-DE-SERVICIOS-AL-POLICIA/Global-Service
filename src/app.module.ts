@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { ProcedureDocumentsModule } from './procedure-documents/procedure-documents.module';
-import { UnitsModule } from './units/config.module';
+import { UnitsModule } from './units/units.module';
 import { DegreesModule } from './degrees/degrees.module';
 import { DbEnvs } from './config';
 
