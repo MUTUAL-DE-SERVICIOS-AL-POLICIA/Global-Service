@@ -5,6 +5,7 @@ import { ProcedureDocumentsModule } from './procedure-documents/procedure-docume
 import { UnitsModule } from './units/units.module';
 import { DegreesModule } from './degrees/degrees.module';
 import { DbEnvs } from './config';
+import { CategoriesModule } from './categories/categories.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { DbEnvs } from './config';
     ProcedureDocumentsModule,
     UnitsModule,
     DegreesModule,
+    CategoriesModule,
   ],
 })
 export class AppModule {}
