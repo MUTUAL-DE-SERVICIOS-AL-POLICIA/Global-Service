@@ -5,7 +5,7 @@ import {
   PrimaryGeneratedColumn,
   Column,
 } from 'typeorm';
-import { Breakdown } from './breakdown.entity';
+import { Breakdown } from './';
 
 @Entity({ schema: 'public', name: 'units', synchronize: false })
 export class Unit {
