@@ -8,6 +8,7 @@ import { DbEnvs } from './config';
 import { CategoriesModule } from './categories/categories.module';
 import { KinshipsModule } from './kinships/kinships.module';
 import { FinancialEntitiesModule } from './financial-entities/financial-entities.module';
+import { PensionEntitiesModule } from './pension-entities/pension-entities.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { FinancialEntitiesModule } from './financial-entities/financial-entities
     CategoriesModule,
     KinshipsModule,
     FinancialEntitiesModule,
+    PensionEntitiesModule,
   ],
 })
 export class AppModule {}
