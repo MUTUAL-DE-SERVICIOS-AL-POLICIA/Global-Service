@@ -9,6 +9,7 @@ export class UnitsService {
   constructor(
     @InjectRepository(Unit)
     private readonly unitsRepository: Repository<Unit>,
+    @InjectRepository(Breakdown)
     private readonly breakdownsRepository: Repository<Breakdown>,
   ) {}
   async findAllUnits(): Promise<Partial<Unit>[]> {
