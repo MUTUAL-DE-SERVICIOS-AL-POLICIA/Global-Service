@@ -9,6 +9,7 @@ import { CategoriesModule } from './categories/categories.module';
 import { KinshipsModule } from './kinships/kinships.module';
 import { FinancialEntitiesModule } from './financial-entities/financial-entities.module';
 import { PensionEntitiesModule } from './pension-entities/pension-entities.module';
+import { CitiesModule } from './cities/cities.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { PensionEntitiesModule } from './pension-entities/pension-entities.modul
     KinshipsModule,
     FinancialEntitiesModule,
     PensionEntitiesModule,
+    CitiesModule,
   ],
 })
 export class AppModule {}
