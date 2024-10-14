@@ -1,4 +1,4 @@
-import { Controller } from '@nestjs/common';
+import { Controller, ParseIntPipe } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { CategoriesService } from './categories.service';
 
@@ -6,14 +6,13 @@ import { CategoriesService } from './categories.service';
 export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}
 
-  @MessagePattern('findAllCategories')
-  findAll() {
-    return this.categoriesService.findAll();
+  @MessagePattern('categories.findAll')
+  findAllCategories() {
+    return this.categoriesService.findAllCategories();
   }
 
-  @MessagePattern('findOneCategory')
-  findOne(@Payload() id: number) {
-    return this.categoriesService.findOne(id);
+  @MessagePattern('categories.findOne')
+  findOneCategory(@Payload('id', ParseIntPipe) id: number) {
+    return this.categoriesService.findOneCategory(id);
   }
-
 }
