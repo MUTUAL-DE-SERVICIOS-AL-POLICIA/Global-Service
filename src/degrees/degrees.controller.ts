@@ -11,7 +11,7 @@ export class DegreesController {
     return this.degreesService.findAllDegrees();
   }
 
-  @MessagePattern('degrees.findOne')
+  @MessagePattern('degree.findOne')
   findOneUnit(@Payload('id', ParseIntPipe) id: number) {
     return this.degreesService.findOneDegree(id);
   }
@@ -21,7 +21,7 @@ export class DegreesController {
     return this.degreesService.findAllHierarchies();
   }
 
-  @MessagePattern('hierarchies.findOne')
+  @MessagePattern('hierarchy.findOne')
   findOneHierarchy(@Payload('id', ParseIntPipe) id: number) {
     return this.degreesService.findOneHierarchy(id);
   }

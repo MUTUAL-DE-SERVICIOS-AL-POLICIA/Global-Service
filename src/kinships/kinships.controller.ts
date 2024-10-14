@@ -11,7 +11,7 @@ export class KinshipsController {
     return this.kinshipsService.findAllKinships();
   }
 
-  @MessagePattern('kinships.findOne')
+  @MessagePattern('kinship.findOne')
   findOneKinship(@Payload('id', ParseIntPipe) id: number) {
     return this.kinshipsService.findOneKinship(id);
   }
