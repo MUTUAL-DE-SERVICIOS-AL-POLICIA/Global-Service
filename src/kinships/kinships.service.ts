@@ -10,13 +10,13 @@ export class KinshipsService {
     private readonly kinshipsRepository: Repository<Kinship>,
   ) {}
 
-  async findAllKinships() {
+  async findAllKinships(): Promise<Partial<Kinship>[]> {
     return this.kinshipsRepository.find({
       select: ['id', 'name'],
     });
   }
 
-  async findOneKinship(id: number) {
+  async findOneKinship(id: number): Promise<Kinship> {
     const kinship = this.kinshipsRepository.findOneBy({ id });
 
     if (!kinship) throw new NotFoundException(`Kinship with ${id} not found`);
