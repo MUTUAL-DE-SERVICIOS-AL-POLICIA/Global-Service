@@ -1,12 +1,46 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Degree, Hierarchy } from './entities';
 
 @Injectable()
 export class DegreesService {
-  findAll() {
-    return `This action returns all degrees`;
+  private readonly logger = new Logger('BreakdownService');
+  constructor(
+    @InjectRepository(Degree)
+    private readonly degreesRepository: Repository<Degree>,
+    @InjectRepository(Hierarchy)
+    private readonly hierarchiesRepository: Repository<Hierarchy>,
+  ) {}
+  async findAllDegrees(): Promise<Partial<Degree>[]> {
+    return this.degreesRepository.find({
+      select: ['code', 'name'],
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} degree`;
+  async findOneDegree(id: number): Promise<Degree> {
+    const degree = await this.degreesRepository.findOneBy({ id });
+
+    if (!degree) throw new NotFoundException(`Degree with: ${id} not found`);
+
+    return degree;
+  }
+
+  async findAllHierarchies(): Promise<Partial<Hierarchy>[]> {
+    return this.hierarchiesRepository.find({
+      select: ['code', 'name'],
+    });
+  }
+
+  async findOneHierarchy(id: number): Promise<Hierarchy> {
+    const hierarchy = await this.hierarchiesRepository.findOne({
+      where: { id },
+      relations: ['degrees'],
+    });
+
+    if (!hierarchy)
+      throw new NotFoundException(`Hierarchy with: ${id} not found`);
+
+    return hierarchy;
   }
 }

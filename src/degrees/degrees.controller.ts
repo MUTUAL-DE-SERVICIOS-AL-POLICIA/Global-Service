@@ -1,4 +1,4 @@
-import { Controller } from '@nestjs/common';
+import { Controller, ParseIntPipe } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { DegreesService } from './degrees.service';
 
@@ -6,13 +6,23 @@ import { DegreesService } from './degrees.service';
 export class DegreesController {
   constructor(private readonly degreesService: DegreesService) {}
 
-  @MessagePattern('findAllDegrees')
-  findAll() {
-    return this.degreesService.findAll();
+  @MessagePattern('degrees.findAll')
+  findAllUnits() {
+    return this.degreesService.findAllDegrees();
   }
 
-  @MessagePattern('findOneDegree')
-  findOne(@Payload() id: number) {
-    return this.degreesService.findOne(id);
+  @MessagePattern('degrees.findOne')
+  findOneUnit(@Payload('id', ParseIntPipe) id: number) {
+    return this.degreesService.findOneDegree(id);
+  }
+
+  @MessagePattern('hierarchies.findAll')
+  findAllHierarchies() {
+    return this.degreesService.findAllHierarchies();
+  }
+
+  @MessagePattern('hierarchies.findOne')
+  findOneHierarchy(@Payload('id', ParseIntPipe) id: number) {
+    return this.degreesService.findOneHierarchy(id);
   }
 }

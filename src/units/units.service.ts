@@ -39,7 +39,7 @@ export class UnitsService {
     });
 
     if (!breakdown)
-      throw new NotFoundException(`breakdowns with: ${id} not found`);
+      throw new NotFoundException(`Breakdown with: ${id} not found`);
 
     return breakdown;
   }
