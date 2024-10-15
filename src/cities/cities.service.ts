@@ -10,7 +10,7 @@ export class CitiesService {
     private readonly citiesRepository: Repository<City>,
   ) {}
 
-  async findAllCities(): Promise<Partial<City>[]> {
+  async findAll(): Promise<Partial<City>[]> {
     return this.citiesRepository.find({
       select: [
         'id',
@@ -24,7 +24,7 @@ export class CitiesService {
     });
   }
 
-  async findOneCity(id: number): Promise<City> {
+  async findOne(id: number): Promise<City> {
     const city = this.citiesRepository.findOneBy({ id });
     if (!city) throw new NotFoundException(`City with ${id} not found`);
     return city;

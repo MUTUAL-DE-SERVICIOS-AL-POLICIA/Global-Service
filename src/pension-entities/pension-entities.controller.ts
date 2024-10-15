@@ -9,12 +9,12 @@ export class PensionEntitiesController {
   ) {}
 
   @MessagePattern('pensionEntities.findAll')
-  findAllPensionEntities() {
-    return this.pensionEntitiesService.findAllPensionEntities();
+  findAll() {
+    return this.pensionEntitiesService.findAll();
   }
 
   @MessagePattern('pensionEntity.findOne')
-  findOnePensionEntity(@Payload('id', ParseIntPipe) id: number) {
-    return this.pensionEntitiesService.findOnePensionEntity(id);
+  findOne(@Payload('id', ParseIntPipe) id: number) {
+    return this.pensionEntitiesService.findOne(id);
   }
 }
