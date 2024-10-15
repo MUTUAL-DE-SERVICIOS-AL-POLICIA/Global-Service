@@ -14,6 +14,6 @@ export class Category {
   @Column()
   name: string;
 
-  @Column({ precision: 13, scale: 2 })
+  @Column({ type: 'numeric', precision: 13, scale: 2 })
   percentage: number;
 }
