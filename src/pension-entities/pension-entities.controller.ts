@@ -13,7 +13,7 @@ export class PensionEntitiesController {
     return this.pensionEntitiesService.findAll();
   }
 
-  @MessagePattern('pensionEntity.findOne')
+  @MessagePattern('pensionEntities.findOne')
   findOne(@Payload('id', ParseIntPipe) id: number) {
     return this.pensionEntitiesService.findOne(id);
   }

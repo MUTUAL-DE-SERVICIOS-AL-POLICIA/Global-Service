@@ -11,7 +11,7 @@ export class CategoriesController {
     return this.categoriesService.findAll();
   }
 
-  @MessagePattern('category.findOne')
+  @MessagePattern('categories.findOne')
   findOne(@Payload('id', ParseIntPipe) id: number) {
     return this.categoriesService.findOne(id);
   }
