@@ -13,7 +13,7 @@ export class FinancialEntitiesController {
     return this.financialEntitiesService.findAll();
   }
 
-  @MessagePattern('financialEntity.findOne')
+  @MessagePattern('financialEntities.findOne')
   findOne(@Payload('id', ParseIntPipe) id: number) {
     return this.financialEntitiesService.findOne(id);
   }

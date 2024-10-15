@@ -11,7 +11,7 @@ export class CitiesController {
     return this.citiesService.findAll();
   }
 
-  @MessagePattern('city.findOne')
+  @MessagePattern('cities.findOne')
   findOne(@Payload('id', ParseIntPipe) id: number) {
     return this.citiesService.findOne(id);
   }

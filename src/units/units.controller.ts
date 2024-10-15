@@ -11,7 +11,7 @@ export class UnitsController {
     return this.unitsService.findAllUnits();
   }
 
-  @MessagePattern('unit.findOne')
+  @MessagePattern('units.findOne')
   findOneUnit(@Payload('id', ParseIntPipe) id: number) {
     return this.unitsService.findOneUnit(id);
   }
@@ -21,7 +21,7 @@ export class UnitsController {
     return this.unitsService.findAllBreakdowns();
   }
 
-  @MessagePattern('breakdown.findOne')
+  @MessagePattern('breakdowns.findOne')
   findOneBreakdown(@Payload('id', ParseIntPipe) id: number) {
     return this.unitsService.findOneBreakdown(id);
   }
