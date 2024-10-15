@@ -1,4 +1,4 @@
-import { Controller } from '@nestjs/common';
+import { Controller, ParseIntPipe } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { CitiesService } from './cities.service';
 
@@ -6,14 +6,13 @@ import { CitiesService } from './cities.service';
 export class CitiesController {
   constructor(private readonly citiesService: CitiesService) {}
 
-  @MessagePattern('findAllCities')
-  findAll() {
-    return this.citiesService.findAll();
+  @MessagePattern('cities.findAll')
+  findAllCities() {
+    return this.citiesService.findAllCities();
   }
 
-  @MessagePattern('findOneCity')
-  findOne(@Payload() id: number) {
-    return this.citiesService.findOne(id);
+  @MessagePattern('city.findOne')
+  findOneCity(@Payload('id', ParseIntPipe) id: number) {
+    return this.citiesService.findOneCity(id);
   }
-
 }
