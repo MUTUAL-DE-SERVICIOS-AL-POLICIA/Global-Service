@@ -10,13 +10,13 @@ export class PensionEntitiesService {
     private readonly pensionEntitiesRepository: Repository<PensionEntity>,
   ) {}
 
-  async findAllPensionEntities(): Promise<Partial<PensionEntity>[]> {
+  async findAll(): Promise<Partial<PensionEntity>[]> {
     return this.pensionEntitiesRepository.find({
       select: ['id', 'type', 'name'],
     });
   }
 
-  async findOnePensionEntity(id: number): Promise<PensionEntity> {
+  async findOne(id: number): Promise<PensionEntity> {
     const pensionEntity = this.pensionEntitiesRepository.findOneBy({ id });
     if (!pensionEntity)
       throw new NotFoundException(`PensionEntity with ${id} not found`);

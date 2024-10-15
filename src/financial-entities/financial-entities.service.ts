@@ -10,13 +10,13 @@ export class FinancialEntitiesService {
     private readonly financialEntitiesRepository: Repository<FinancialEntity>,
   ) {}
 
-  async findAllFinancialEntities(): Promise<Partial<FinancialEntity>[]> {
+  async findAll(): Promise<Partial<FinancialEntity>[]> {
     return this.financialEntitiesRepository.find({
       select: ['id', 'name'],
     });
   }
 
-  async findOneFinancialEntity(id: number): Promise<FinancialEntity> {
+  async findOne(id: number): Promise<FinancialEntity> {
     const financialEntity = this.financialEntitiesRepository.findOneBy({ id });
     if (!financialEntity)
       throw new NotFoundException(`Financial Entity with ${id} not found`);

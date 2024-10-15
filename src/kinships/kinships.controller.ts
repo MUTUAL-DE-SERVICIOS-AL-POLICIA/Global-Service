@@ -7,12 +7,12 @@ export class KinshipsController {
   constructor(private readonly kinshipsService: KinshipsService) {}
 
   @MessagePattern('kinships.findAll')
-  findAllKinships() {
-    return this.kinshipsService.findAllKinships();
+  findAll() {
+    return this.kinshipsService.findAll();
   }
 
   @MessagePattern('kinship.findOne')
-  findOneKinship(@Payload('id', ParseIntPipe) id: number) {
-    return this.kinshipsService.findOneKinship(id);
+  findOne(@Payload('id', ParseIntPipe) id: number) {
+    return this.kinshipsService.findOne(id);
   }
 }

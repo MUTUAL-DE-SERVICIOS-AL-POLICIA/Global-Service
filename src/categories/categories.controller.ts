@@ -7,12 +7,12 @@ export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}
 
   @MessagePattern('categories.findAll')
-  findAllCategories() {
-    return this.categoriesService.findAllCategories();
+  findAll() {
+    return this.categoriesService.findAll();
   }
 
   @MessagePattern('category.findOne')
-  findOneCategory(@Payload('id', ParseIntPipe) id: number) {
-    return this.categoriesService.findOneCategory(id);
+  findOne(@Payload('id', ParseIntPipe) id: number) {
+    return this.categoriesService.findOne(id);
   }
 }

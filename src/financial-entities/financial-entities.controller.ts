@@ -9,12 +9,12 @@ export class FinancialEntitiesController {
   ) {}
 
   @MessagePattern('financialEntities.findAll')
-  findAllFinancialEntities() {
-    return this.financialEntitiesService.findAllFinancialEntities();
+  findAll() {
+    return this.financialEntitiesService.findAll();
   }
 
   @MessagePattern('financialEntity.findOne')
-  findOneFinancialEntity(@Payload('id', ParseIntPipe) id: number) {
-    return this.financialEntitiesService.findOneFinancialEntity(id);
+  findOne(@Payload('id', ParseIntPipe) id: number) {
+    return this.financialEntitiesService.findOne(id);
   }
 }

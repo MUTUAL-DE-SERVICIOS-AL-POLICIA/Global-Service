@@ -9,13 +9,13 @@ export class CategoriesService {
     private readonly categoriesRepository: Repository<Category>,
   ) {}
 
-  async findAllCategories(): Promise<Partial<Category>[]> {
+  async findAll(): Promise<Partial<Category>[]> {
     return this.categoriesRepository.find({
       select: ['id', 'name'],
     });
   }
 
-  async findOneCategory(id: number): Promise<Category> {
+  async findOne(id: number): Promise<Category> {
     const category = await this.categoriesRepository.findOneBy({ id });
 
     if (!category) throw new NotFoundException(`category with ${id} not found`);

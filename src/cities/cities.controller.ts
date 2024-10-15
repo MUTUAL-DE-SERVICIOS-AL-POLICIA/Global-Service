@@ -7,12 +7,12 @@ export class CitiesController {
   constructor(private readonly citiesService: CitiesService) {}
 
   @MessagePattern('cities.findAll')
-  findAllCities() {
-    return this.citiesService.findAllCities();
+  findAll() {
+    return this.citiesService.findAll();
   }
 
   @MessagePattern('city.findOne')
-  findOneCity(@Payload('id', ParseIntPipe) id: number) {
-    return this.citiesService.findOneCity(id);
+  findOne(@Payload('id', ParseIntPipe) id: number) {
+    return this.citiesService.findOne(id);
   }
 }
