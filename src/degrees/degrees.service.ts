@@ -18,7 +18,7 @@ export class DegreesService {
     });
   }
 
-  async findOneDegree(id: number): Promise<Degree> {
+  async findOneDegrees(id: number): Promise<Degree> {
     const degree = await this.degreesRepository.findOneBy({ id });
 
     if (!degree) throw new NotFoundException(`Degree with: ${id} not found`);
@@ -32,7 +32,7 @@ export class DegreesService {
     });
   }
 
-  async findOneHierarchy(id: number): Promise<Hierarchy> {
+  async findOneHierarchies(id: number): Promise<Hierarchy> {
     const hierarchy = await this.hierarchiesRepository.findOne({
       where: { id },
       relations: ['degrees'],
