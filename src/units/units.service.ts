@@ -18,7 +18,7 @@ export class UnitsService {
     });
   }
 
-  async findOneUnit(id: number): Promise<Unit> {
+  async findOneUnits(id: number): Promise<Unit> {
     const unit = await this.unitsRepository.findOneBy({ id });
 
     if (!unit) throw new NotFoundException(`Unit with: ${id} not found`);
@@ -32,7 +32,7 @@ export class UnitsService {
     });
   }
 
-  async findOneBreakdown(id: number): Promise<Breakdown> {
+  async findOneBreakdowns(id: number): Promise<Breakdown> {
     const breakdown = await this.breakdownsRepository.findOne({
       where: { id },
       relations: ['units'],

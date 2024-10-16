@@ -12,8 +12,8 @@ export class UnitsController {
   }
 
   @MessagePattern('units.findOne')
-  findOneUnit(@Payload('id', ParseIntPipe) id: number) {
-    return this.unitsService.findOneUnit(id);
+  findOneUnits(@Payload('id', ParseIntPipe) id: number) {
+    return this.unitsService.findOneUnits(id);
   }
 
   @MessagePattern('breakdowns.findAll')
@@ -22,7 +22,7 @@ export class UnitsController {
   }
 
   @MessagePattern('breakdowns.findOne')
-  findOneBreakdown(@Payload('id', ParseIntPipe) id: number) {
-    return this.unitsService.findOneBreakdown(id);
+  findOneBreakdowns(@Payload('id', ParseIntPipe) id: number) {
+    return this.unitsService.findOneBreakdowns(id);
   }
 }
