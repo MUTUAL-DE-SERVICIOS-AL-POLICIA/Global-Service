@@ -19,7 +19,10 @@ export class UnitsService {
   }
 
   async findOneUnits(id: number): Promise<Unit> {
-    const unit = await this.unitsRepository.findOneBy({ id });
+    const unit = await this.unitsRepository.findOne({
+      where: { id },
+      relations: ['breakdown'],
+    });
 
     if (!unit) throw new NotFoundException(`Unit with: ${id} not found`);
 
@@ -43,4 +46,5 @@ export class UnitsService {
 
     return breakdown;
   }
+
 }
