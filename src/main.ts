@@ -18,6 +18,6 @@ async function bootstrap() {
   );
 
   await app.listen();
-  logger.log(`Persons Microservice running on port ${PortEnvs.port}`);
+  logger.log(`General Microservice running on port ${PortEnvs.port}`);
 }
 bootstrap();
