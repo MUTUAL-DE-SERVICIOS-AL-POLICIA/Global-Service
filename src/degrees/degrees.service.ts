@@ -19,7 +19,10 @@ export class DegreesService {
   }
 
   async findOneDegrees(id: number): Promise<Degree> {
-    const degree = await this.degreesRepository.findOneBy({ id });
+    const degree = await this.degreesRepository.findOne({ 
+      where: { id },
+      relations: ['hierarchy'], 
+    });
 
     if (!degree) throw new NotFoundException(`Degree with: ${id} not found`);
 
