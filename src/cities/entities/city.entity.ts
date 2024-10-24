@@ -9,16 +9,16 @@ export class City {
   name: string;
 
   @Column()
-  first_shortened: string;
+  firstShortened: string;
 
   @Column()
-  second_shortened: string;
+  secondShortened: string;
 
   @Column()
-  third_shortened: string;
+  thirdShortened: string;
 
   @Column()
-  to_bank?: string;
+  toBank?: string;
 
   @Column({ type: 'numeric', precision: 10, scale: 2 })
   latitude?: number;
@@ -27,14 +27,14 @@ export class City {
   longitude?: number;
 
   @Column()
-  company_address: string;
+  companyAddress: string;
 
   @Column()
-  phone_prefix: number;
+  phonePrefix: number;
 
   @Column('json')
-  company_phones: any;
+  companyPhones: any;
 
   @Column('json')
-  company_cellphones: any;
+  companyCellphones: any;
 }

@@ -25,9 +25,8 @@ export class Degree {
   correlative?: number;
 
   @Column()
-  is_active: boolean;
+  isActive: boolean;
 
   @ManyToOne(() => Hierarchy, (hierarchy) => hierarchy.degrees)
-  @JoinColumn({ name: 'hierarchy_id' })
   hierarchy: Hierarchy;
 }

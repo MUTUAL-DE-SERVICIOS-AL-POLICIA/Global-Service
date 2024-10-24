@@ -25,12 +25,11 @@ export class Unit {
   shortened: string;
 
   @Column()
-  created_at: Date;
+  createdAt: Date;
 
   @Column()
-  updated_at: Date;
+  updatedAt: Date;
 
   @ManyToOne(() => Breakdown, (breakdown) => breakdown.units)
-  @JoinColumn({ name: 'breakdown_id' })
   breakdown: Breakdown;
 }

@@ -9,11 +9,11 @@ export class ProcedureDocument {
   name: string;
 
   @Column()
-  created_at: Date;
+  createdAt: Date;
 
   @Column()
-  updated_at: Date;
+  updatedAt: Date;
 
   @Column()
-  expire_date: Date;
+  expireDate: Date;
 }
