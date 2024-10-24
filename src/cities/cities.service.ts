@@ -15,11 +15,11 @@ export class CitiesService {
       select: [
         'id',
         'name',
-        'first_shortened',
-        'second_shortened',
-        'third_shortened',
-        'company_phones',
-        'company_cellphones',
+        'firstShortened',
+        'secondShortened',
+        'thirdShortened',
+        'companyPhones',
+        'companyCellphones',
       ],
     });
   }

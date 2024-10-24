@@ -12,5 +12,5 @@ export class PensionEntity {
   name: string;
 
   @Column()
-  is_active: boolean;
+  isActive: boolean;
 }

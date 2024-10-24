@@ -16,11 +16,11 @@ export class Kinship {
   name: string;
 
   @CreateDateColumn()
-  created_at?: Date;
+  createdAt?: Date;
 
   @UpdateDateColumn()
-  updated_at?: Date;
+  updatedAt?: Date;
 
   @DeleteDateColumn({ nullable: true })
-  deleted_at?: Date;
+  deletedAt?: Date;
 }

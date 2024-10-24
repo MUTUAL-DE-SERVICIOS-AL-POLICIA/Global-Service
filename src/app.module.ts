@@ -10,6 +10,8 @@ import { KinshipsModule } from './kinships/kinships.module';
 import { FinancialEntitiesModule } from './financial-entities/financial-entities.module';
 import { PensionEntitiesModule } from './pension-entities/pension-entities.module';
 import { CitiesModule } from './cities/cities.module';
+import { ModulesModule } from './modules/modules.module';
+import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 
 @Module({
   imports: [
@@ -23,6 +25,7 @@ import { CitiesModule } from './cities/cities.module';
       password: DbEnvs.dbPassword,
       autoLoadEntities: DbEnvs.dbAutoLoadEntities,
       synchronize: DbEnvs.dbSynchronize,
+      namingStrategy: new SnakeNamingStrategy(),
     }),
     ProcedureDocumentsModule,
     UnitsModule,
@@ -32,6 +35,7 @@ import { CitiesModule } from './cities/cities.module';
     FinancialEntitiesModule,
     PensionEntitiesModule,
     CitiesModule,
+    ModulesModule,
   ],
 })
 export class AppModule {}
