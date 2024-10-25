@@ -17,7 +17,10 @@ export class NatsService {
           status: true,
         })),
         catchError((error) => {
-          this.logger.error(`Error calling microservice: ${service}`, error.message);
+          this.logger.error(
+            `Error calling microservice: ${service}`,
+            error.message,
+          );
           return of({
             status: false,
             message: 'Microservice call failed',
@@ -27,7 +30,11 @@ export class NatsService {
     );
   }
 
-  async fetchAndClean(entityId: number | undefined, service: string, keysToOmit: string[]) {
+  async fetchAndClean(
+    entityId: number | undefined,
+    service: string,
+    keysToOmit: string[],
+  ) {
     if (!entityId) return null;
     const data = await this.firstValue(service, { id: entityId });
     if (!data) return null;
