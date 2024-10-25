@@ -1,5 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
-
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { ProcedureRequirement } from 'src/modules/entities';
 @Entity({ schema: 'public', name: 'procedure_documents', synchronize: false })
 export class ProcedureDocument {
   @PrimaryGeneratedColumn()
@@ -16,4 +16,10 @@ export class ProcedureDocument {
 
   @Column()
   expireDate: Date;
+
+  @OneToMany(
+    () => ProcedureRequirement,
+    (procedureRequirement) => procedureRequirement.procedureDocument,
+  )
+  procedureRequirements: ProcedureRequirement[];
 }
