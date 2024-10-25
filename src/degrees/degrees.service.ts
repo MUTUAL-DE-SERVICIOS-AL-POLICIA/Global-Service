@@ -19,9 +19,9 @@ export class DegreesService {
   }
 
   async findOneDegrees(id: number): Promise<Degree> {
-    const degree = await this.degreesRepository.findOne({ 
+    const degree = await this.degreesRepository.findOne({
       where: { id },
-      relations: ['hierarchy'], 
+      relations: ['hierarchy'],
     });
 
     if (!degree) throw new NotFoundException(`Degree with: ${id} not found`);

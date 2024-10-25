@@ -22,7 +22,7 @@ export class ModulesService {
     const module = this.moduleRepository.findOne({
       where: { id },
     });
-    if(!module) throw new NotFoundException(`Module with id ${id} not found`);
+    if (!module) throw new NotFoundException(`Module with id ${id} not found`);
 
     return module;
   }
@@ -35,7 +35,8 @@ export class ModulesService {
     const module = this.procedureTypeRepository.findOne({
       where: { id },
     });
-    if(!module) throw new NotFoundException(`ProcedureType with id ${id} not found`);
+    if (!module)
+      throw new NotFoundException(`ProcedureType with id ${id} not found`);
 
     return module;
   }
@@ -48,9 +49,9 @@ export class ModulesService {
     const module = this.procedureModalityRepository.findOne({
       where: { id },
     });
-    if(!module) throw new NotFoundException(`ProcedureModality with id ${id} not found`);
+    if (!module)
+      throw new NotFoundException(`ProcedureModality with id ${id} not found`);
 
     return module;
   }
-
 }
