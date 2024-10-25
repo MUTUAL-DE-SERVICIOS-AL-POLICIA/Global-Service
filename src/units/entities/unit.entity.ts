@@ -1,10 +1,4 @@
-import {
-  Entity,
-  ManyToOne,
-  JoinColumn,
-  PrimaryGeneratedColumn,
-  Column,
-} from 'typeorm';
+import { Entity, ManyToOne, PrimaryGeneratedColumn, Column } from 'typeorm';
 import { Breakdown } from './';
 
 @Entity({ schema: 'public', name: 'units', synchronize: false })

@@ -35,5 +35,4 @@ export class ModulesController {
   findOneProcedureModalities(@Payload('id', ParseIntPipe) id: number) {
     return this.modulesService.findOneProcedureModalities(id);
   }
-
 }

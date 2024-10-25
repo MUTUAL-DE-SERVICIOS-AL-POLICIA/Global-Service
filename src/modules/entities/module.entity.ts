@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn, OneToMany } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 import { ProcedureType } from './';
 
 @Entity({ schema: 'public', name: 'modules', synchronize: false })
@@ -20,5 +20,4 @@ export class Module {
 
   @OneToMany(() => ProcedureType, (procedureType) => procedureType.module)
   procedureTypes: ProcedureType[];
-
 }

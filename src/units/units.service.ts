@@ -46,5 +46,4 @@ export class UnitsService {
 
     return breakdown;
   }
-
 }
