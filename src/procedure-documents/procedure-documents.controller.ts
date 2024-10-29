@@ -19,7 +19,7 @@ export class ProcedureDocumentsController {
   }
 
   @MessagePattern('procedureDocuments.findAllByIds')
-  async findAllByIds(data: { ids: number[] }): Promise<Record<number, string>> {
+  async findAllByIds(data: { ids: number[] }): Promise<Record<number, { name: string; shortened: string }>> {
     return this.procedureDocumentsService.findAllByIds(data.ids);
-  }
+  }  
 }
