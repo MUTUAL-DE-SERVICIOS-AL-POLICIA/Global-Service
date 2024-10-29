@@ -9,6 +9,9 @@ export class ProcedureDocument {
   name: string;
 
   @Column()
+  shortened: string;
+
+  @Column()
   createdAt: Date;
 
   @Column()

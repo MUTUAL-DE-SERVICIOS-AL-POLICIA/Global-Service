@@ -55,20 +55,7 @@ export class ModulesService {
     return module;
   }
 
-  async findDataRelations(
-    id: number,
-    entity: 'module' | 'procedureType' | 'procedureModality',
-    relations: string,
-  ): Promise<any> {
-    const data = await this.findAndVerifyModuleWithRelations(
-      id,
-      [relations],
-      entity
-    );
-    return data;
-  }
-
-  private async findAndVerifyModuleWithRelations(
+  async findAndVerifyModuleWithRelations(
     id: number,
     relations: string[],
     entity: 'module' | 'procedureType' | 'procedureModality',

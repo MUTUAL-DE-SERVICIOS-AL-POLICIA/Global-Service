@@ -39,9 +39,9 @@ export class ModulesController {
   @MessagePattern('modules.findDataRelations')
   findDataRelations(
     @Payload('id', ParseIntPipe) id: number,
+    @Payload('relations') relations: [],
     @Payload('entity') entity:  'module' | 'procedureType' | 'procedureModality',
-    @Payload('relations') relations: string,
   ) {
-    return this.modulesService.findDataRelations(id, entity, relations);
+    return this.modulesService.findAndVerifyModuleWithRelations(id,relations, entity );
   }
 }
