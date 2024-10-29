@@ -35,4 +35,13 @@ export class ModulesController {
   findOneProcedureModalities(@Payload('id', ParseIntPipe) id: number) {
     return this.modulesService.findOneProcedureModalities(id);
   }
+  
+  @MessagePattern('modules.findDataRelations')
+  findDataRelations(
+    @Payload('id', ParseIntPipe) id: number,
+    @Payload('relations') relations: [],
+    @Payload('entity') entity:  'module' | 'procedureType' | 'procedureModality',
+  ) {
+    return this.modulesService.findAndVerifyModuleWithRelations(id,relations, entity );
+  }
 }

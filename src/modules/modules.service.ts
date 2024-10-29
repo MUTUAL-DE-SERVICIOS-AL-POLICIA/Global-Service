@@ -54,4 +54,19 @@ export class ModulesService {
 
     return module;
   }
+
+  async findAndVerifyModuleWithRelations(
+    id: number,
+    relations: string[],
+    entity: 'module' | 'procedureType' | 'procedureModality',
+  ): Promise<any> {
+    const response = await this[`${entity}Repository`].findOne({
+      where: { id},
+      relations: relations.length > 0 ? relations : [],
+    });
+    if (!response) {
+      throw new NotFoundException(`${entity} with ID: ${id} not found`);
+    }
+    return response;
+  }
 }
