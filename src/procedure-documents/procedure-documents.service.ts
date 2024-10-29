@@ -27,16 +27,19 @@ export class ProcedureDocumentsService {
     return procedureDocument;
   }
 
-  async findAllByIds(ids: number[]): Promise<Record<number, string>> {
+  async findAllByIds(ids: number[]): Promise<Record<number, { name: string, shortened: string }>> {
     const documents = await this.procedureDocumentsRepository.findBy({
       id: In(ids),
     });
-
-    const result = documents.reduce((acc: Record<number, string>, doc) => {
-      acc[doc.id] = doc.name;
+  
+    const result = documents.reduce((acc: Record<number, { name: string, shortened: string }>, doc) => {
+      acc[doc.id] = {
+        name: doc.name,
+        shortened: doc.shortened || '',
+      };
       return acc;
     }, {});
-
+  
     return result;
-  }
+  }  
 }
