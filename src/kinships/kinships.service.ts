@@ -18,7 +18,7 @@ export class KinshipsService {
   }
 
   async findOne(id: number): Promise<Kinship> {
-    const kinship = this.kinshipsRepository.findOneBy({ id });
+    const kinship = await this.kinshipsRepository.findOneBy({ id });
 
     if (!kinship)
       throw new RpcException({

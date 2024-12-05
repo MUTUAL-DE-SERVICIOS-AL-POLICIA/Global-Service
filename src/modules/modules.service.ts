@@ -20,7 +20,7 @@ export class ModulesService {
   }
 
   async findOneModules(id: number): Promise<Module> {
-    const module = this.moduleRepository.findOne({
+    const module = await this.moduleRepository.findOne({
       where: { id },
     });
     if (!module)
@@ -37,7 +37,7 @@ export class ModulesService {
   }
 
   async findOneProcedureTypes(id: number): Promise<ProcedureType> {
-    const module = this.procedureTypeRepository.findOne({
+    const module = await this.procedureTypeRepository.findOne({
       where: { id },
     });
     if (!module)
@@ -54,7 +54,7 @@ export class ModulesService {
   }
 
   async findOneProcedureModalities(id: number): Promise<ProcedureModality> {
-    const module = this.procedureModalityRepository.findOne({
+    const module = await this.procedureModalityRepository.findOne({
       where: { id },
     });
     if (!module) {

@@ -18,7 +18,7 @@ export class FinancialEntitiesService {
   }
 
   async findOne(id: number): Promise<FinancialEntity> {
-    const financialEntity = this.financialEntitiesRepository.findOneBy({ id });
+    const financialEntity = await this.financialEntitiesRepository.findOneBy({ id });
     if (!financialEntity)
       throw new RpcException({
         message: `Financial Entity with ${id} not found`,
