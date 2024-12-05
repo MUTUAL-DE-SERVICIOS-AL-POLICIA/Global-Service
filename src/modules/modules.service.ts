@@ -1,7 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Module, ProcedureModality, ProcedureType } from './entities';
+import { RpcException } from '@nestjs/microservices';
 
 @Injectable()
 export class ModulesService {
@@ -22,7 +23,11 @@ export class ModulesService {
     const module = this.moduleRepository.findOne({
       where: { id },
     });
-    if (!module) throw new NotFoundException(`Module with id ${id} not found`);
+    if (!module)
+      throw new RpcException({
+        message: `Module with id ${id} not found`,
+        code: 404,
+      });
 
     return module;
   }
@@ -36,7 +41,10 @@ export class ModulesService {
       where: { id },
     });
     if (!module)
-      throw new NotFoundException(`ProcedureType with id ${id} not found`);
+      throw new RpcException({
+        message: `ProcedureType with id ${id} not found`,
+        code: 404,
+      });
 
     return module;
   }
@@ -49,9 +57,12 @@ export class ModulesService {
     const module = this.procedureModalityRepository.findOne({
       where: { id },
     });
-    if (!module)
-      throw new NotFoundException(`ProcedureModality with id ${id} not found`);
-
+    if (!module) {
+      throw new RpcException({
+        message: `ProcedureModality with id ${id} not found`,
+        code: 404,
+      });
+    }
     return module;
   }
 
@@ -61,11 +72,14 @@ export class ModulesService {
     entity: 'module' | 'procedureType' | 'procedureModality',
   ): Promise<any> {
     const response = await this[`${entity}Repository`].findOne({
-      where: { id},
+      where: { id },
       relations: relations.length > 0 ? relations : [],
     });
     if (!response) {
-      throw new NotFoundException(`${entity} with ID: ${id} not found`);
+      throw new RpcException({
+        message: `${entity} with ID: ${id} not found`,
+        code: 404,
+      });
     }
     return response;
   }

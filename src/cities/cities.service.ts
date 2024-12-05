@@ -1,7 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { City } from './entities/city.entity';
 import { Repository } from 'typeorm';
+import { RpcException } from '@nestjs/microservices';
 
 @Injectable()
 export class CitiesService {
@@ -26,7 +27,12 @@ export class CitiesService {
 
   async findOne(id: number): Promise<City> {
     const city = this.citiesRepository.findOneBy({ id });
-    if (!city) throw new NotFoundException(`City with ${id} not found`);
+
+    if (!city)
+      throw new RpcException({
+        message: `City with ID: ${id} not found`,
+        code: 404,
+      });
     return city;
   }
 }
