@@ -1,7 +1,8 @@
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
 import { ProcedureDocument } from './entities/procedure-document.entity';
+import { RpcException } from '@nestjs/microservices';
 
 @Injectable()
 export class ProcedureDocumentsService {
@@ -22,24 +23,32 @@ export class ProcedureDocumentsService {
     );
 
     if (!procedureDocument)
-      throw new NotFoundException(`Documento with: ${id} not found`);
+      throw new RpcException({
+        message: `Documento with: ${id} not found`,
+        code: 404,
+      });
 
     return procedureDocument;
   }
 
-  async findAllByIds(ids: number[]): Promise<Record<number, { name: string, shortened: string }>> {
+  async findAllByIds(
+    ids: number[],
+  ): Promise<Record<number, { name: string; shortened: string }>> {
     const documents = await this.procedureDocumentsRepository.findBy({
       id: In(ids),
     });
-  
-    const result = documents.reduce((acc: Record<number, { name: string, shortened: string }>, doc) => {
-      acc[doc.id] = {
-        name: doc.name,
-        shortened: doc.shortened || '',
-      };
-      return acc;
-    }, {});
-  
+
+    const result = documents.reduce(
+      (acc: Record<number, { name: string; shortened: string }>, doc) => {
+        acc[doc.id] = {
+          name: doc.name,
+          shortened: doc.shortened || '',
+        };
+        return acc;
+      },
+      {},
+    );
+
     return result;
-  }  
+  }
 }

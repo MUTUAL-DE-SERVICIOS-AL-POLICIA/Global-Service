@@ -1,7 +1,8 @@
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Breakdown, Unit } from './entities';
+import { RpcException } from '@nestjs/microservices';
 
 @Injectable()
 export class UnitsService {
@@ -24,7 +25,11 @@ export class UnitsService {
       relations: ['breakdown'],
     });
 
-    if (!unit) throw new NotFoundException(`Unit with: ${id} not found`);
+    if (!unit)
+      throw new RpcException({
+        message: `Unit with: ${id} not found`,
+        code: 404,
+      });
 
     return unit;
   }
@@ -42,7 +47,10 @@ export class UnitsService {
     });
 
     if (!breakdown)
-      throw new NotFoundException(`Breakdown with: ${id} not found`);
+      throw new RpcException({
+        message: `Breakdown with: ${id} not found`,
+        code: 404,
+      });
 
     return breakdown;
   }

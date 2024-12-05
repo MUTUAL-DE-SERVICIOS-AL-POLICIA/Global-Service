@@ -1,7 +1,8 @@
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Degree, Hierarchy } from './entities';
+import { RpcException } from '@nestjs/microservices';
 
 @Injectable()
 export class DegreesService {
@@ -24,7 +25,11 @@ export class DegreesService {
       relations: ['hierarchy'],
     });
 
-    if (!degree) throw new NotFoundException(`Degree with: ${id} not found`);
+    if (!degree)
+      throw new RpcException({
+        message: `Degree with: ${id} not found`,
+        code: 404,
+      });
 
     return degree;
   }
@@ -42,7 +47,10 @@ export class DegreesService {
     });
 
     if (!hierarchy)
-      throw new NotFoundException(`Hierarchy with: ${id} not found`);
+      throw new RpcException({
+        message: `Hierarchy with: ${id} not found`,
+        code: 404,
+      });
 
     return hierarchy;
   }

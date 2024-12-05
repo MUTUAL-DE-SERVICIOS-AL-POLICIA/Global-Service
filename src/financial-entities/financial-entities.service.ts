@@ -1,7 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FinancialEntity } from './entities/financial-entity.entity';
 import { Repository } from 'typeorm';
+import { RpcException } from '@nestjs/microservices';
 
 @Injectable()
 export class FinancialEntitiesService {
@@ -17,9 +18,12 @@ export class FinancialEntitiesService {
   }
 
   async findOne(id: number): Promise<FinancialEntity> {
-    const financialEntity = this.financialEntitiesRepository.findOneBy({ id });
+    const financialEntity = await this.financialEntitiesRepository.findOneBy({ id });
     if (!financialEntity)
-      throw new NotFoundException(`Financial Entity with ${id} not found`);
+      throw new RpcException({
+        message: `Financial Entity with ${id} not found`,
+        code: 404,
+      });
     return financialEntity;
   }
 }
