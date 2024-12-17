@@ -13,5 +13,6 @@ RUN yarn run build
 
 CMD ["node", "dist/main.js"]
 
+
 # docker build -f dockerfile.prod -t general-microservice .
 # docker run general-microservice
