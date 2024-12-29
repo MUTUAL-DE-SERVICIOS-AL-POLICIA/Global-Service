@@ -83,4 +83,53 @@ export class ModulesService {
     }
     return response;
   }
+
+  async findModulesDocuments(ids: number[]) {
+    if (!ids || ids.length === 0) {
+      return {
+        status: 'error',
+        message: 'No IDs provided',
+        data: [],
+      };
+    }
+
+    const modules = await Promise.all(
+      ids.map((id) =>
+        this.findAndVerifyModuleWithRelations(
+          id,
+          [
+            'procedureTypes.procedureModalities.procedureRequirements.procedureDocument',
+          ],
+          'module',
+        ),
+      ),
+    );
+
+    const documents = Array.from(
+      new Map(
+        modules
+          .flatMap((module) =>
+            module.procedureTypes.flatMap((procedureType) =>
+              procedureType.procedureModalities.flatMap((procedureModality) =>
+                procedureModality.procedureRequirements.flatMap(
+                  (procedureRequirement) => {
+                    const doc = procedureRequirement.procedureDocument;
+                    return doc
+                      ? [[doc.id, { id: doc.id, name: doc.name }]]
+                      : [];
+                  },
+                ),
+              ),
+            ),
+          )
+          .filter((doc) => doc !== null),
+      ).values(),
+    );
+
+    return {
+      status: 'success',
+      message: 'Documents retrieved successfully',
+      data: documents,
+    };
+  }
 }

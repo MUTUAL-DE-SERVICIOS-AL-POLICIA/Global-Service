@@ -28,7 +28,7 @@ export class CitiesService {
   async findOne(id: number): Promise<City> {
     const city = await this.citiesRepository.findOneBy({ id });
 
-    if (!city){
+    if (!city) {
       throw new RpcException({
         message: `City with ID: ${id} not found`,
         code: 404,

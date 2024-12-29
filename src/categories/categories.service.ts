@@ -20,7 +20,7 @@ export class CategoriesService {
   async findOne(id: number): Promise<Category> {
     const category = await this.categoriesRepository.findOneBy({ id });
 
-    if (!category){
+    if (!category) {
       throw new RpcException({
         message: `Category with ID: ${id} not found`,
         code: 404,

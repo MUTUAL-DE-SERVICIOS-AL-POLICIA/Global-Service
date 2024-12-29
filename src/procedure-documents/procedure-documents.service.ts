@@ -13,7 +13,7 @@ export class ProcedureDocumentsService {
   ) {}
   async findAll(): Promise<Partial<ProcedureDocument>[]> {
     return this.procedureDocumentsRepository.find({
-      select: ['name', 'updatedAt'],
+      select: ['id', 'name', 'shortened'],
     });
   }
 
