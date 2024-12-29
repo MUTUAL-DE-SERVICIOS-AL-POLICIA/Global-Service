@@ -18,7 +18,9 @@ export class PensionEntitiesService {
   }
 
   async findOne(id: number): Promise<PensionEntity> {
-    const pensionEntity = await this.pensionEntitiesRepository.findOneBy({ id });
+    const pensionEntity = await this.pensionEntitiesRepository.findOneBy({
+      id,
+    });
     if (!pensionEntity)
       throw new RpcException({
         message: `PensionEntity with ${id} not found`,

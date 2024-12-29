@@ -1,4 +1,4 @@
-import { Controller, ParseIntPipe } from '@nestjs/common';
+import { Controller, ParseArrayPipe, ParseIntPipe } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { ModulesService } from './modules.service';
 
@@ -14,6 +14,11 @@ export class ModulesController {
   @MessagePattern('modules.findOne')
   findOneModules(@Payload('id', ParseIntPipe) id: number) {
     return this.modulesService.findOneModules(id);
+  }
+
+  @MessagePattern('modules.documents')
+  findModulesDocuments(@Payload('ids', ParseArrayPipe) ids: number[]) {
+    return this.modulesService.findModulesDocuments(ids);
   }
 
   @MessagePattern('procedureTypes.findAll')
