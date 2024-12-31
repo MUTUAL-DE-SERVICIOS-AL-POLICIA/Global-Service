@@ -16,11 +16,6 @@ export class ModulesController {
     return this.modulesService.findOneModules(id);
   }
 
-  @MessagePattern('modules.documents')
-  findModulesDocuments(@Payload('ids', ParseArrayPipe) ids: number[]) {
-    return this.modulesService.findModulesDocuments(ids);
-  }
-
   @MessagePattern('procedureTypes.findAll')
   findAllProcedureTypes() {
     return this.modulesService.findAllProcedureTypes();
