@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { In, Repository } from 'typeorm';
+import { In, IsNull, Not, Repository } from 'typeorm';
 import { ProcedureDocument } from './entities/procedure-document.entity';
 import { RpcException } from '@nestjs/microservices';
 
@@ -14,6 +14,10 @@ export class ProcedureDocumentsService {
   async findAll(): Promise<Partial<ProcedureDocument>[]> {
     return this.procedureDocumentsRepository.find({
       select: ['id', 'name', 'shortened'],
+      where: [
+        { shortened: Not(IsNull()) },
+        { shortened: Not('') },
+      ],
     });
   }
 
