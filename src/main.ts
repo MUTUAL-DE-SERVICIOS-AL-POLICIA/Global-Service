@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
-import { PortEnvs, NastEnvs } from './config';
+import { NastEnvs } from './config';
 import { Logger } from '@nestjs/common';
 import {
   RpcCustomExceptionFilter,
@@ -27,6 +27,5 @@ async function bootstrap() {
   );
 
   await app.listen();
-  logger.log(`General Microservice running on port ${PortEnvs.port}`);
 }
 bootstrap();
