@@ -1,4 +1,4 @@
-import { Controller, ParseArrayPipe, ParseIntPipe } from '@nestjs/common';
+import { Controller, ParseIntPipe } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { ModulesService } from './modules.service';
 

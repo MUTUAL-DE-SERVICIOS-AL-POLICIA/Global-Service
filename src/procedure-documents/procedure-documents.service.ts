@@ -14,10 +14,7 @@ export class ProcedureDocumentsService {
   async findAll(): Promise<Partial<ProcedureDocument>[]> {
     return this.procedureDocumentsRepository.find({
       select: ['id', 'name', 'shortened'],
-      where: [
-        { shortened: Not(IsNull()) },
-        { shortened: Not('') },
-      ],
+      where: [{ shortened: Not(IsNull()) }, { shortened: Not('') }],
     });
   }
 
