@@ -14,10 +14,7 @@ export const options: DataSourceOptions & SeederOptions = {
   username: DbEnvs.dbUsername,
   password: DbEnvs.dbPassword,
   synchronize: DbEnvs.dbSynchronize,
-  entities: [
-    'dist/persons/entities/**/*.entity.js',
-    'dist/affiliates/entities/**/*.entity.js',
-  ],
+  entities: [__dirname + '/../**/*.entity{.ts,.js}'],
   namingStrategy: new SnakeNamingStrategy(),
 
   seeds: ['src/database/seeds/**/*{.ts,.js}'],

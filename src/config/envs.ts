@@ -15,7 +15,14 @@ interface EnvVars {
 const envsSchema = joi
   .object({
     NATS_SERVERS: joi.array().items(joi.string()).required(),
+
+    DB_PASSWORD: joi.string().required(),
+    DB_DATABASE: joi.string().required(),
+    DB_HOST: joi.string().required(),
+    DB_PORT: joi.number().required(),
+    DB_USERNAME: joi.string().required(),
     DB_SYNCHRONIZE: joi.string().valid('true', 'false').default('false'),
+    DB_SCHEMA: joi.string().default('beneficiaries'),
   })
   .unknown(true);
 
@@ -48,4 +55,3 @@ export const DbEnvs = {
   dbSynchronize: envVars.DB_SYNCHRONIZE,
   dbSchema: envVars.DB_SCHEMA,
 };
-
