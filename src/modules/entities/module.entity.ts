@@ -18,6 +18,15 @@ export class Module {
   @Column()
   shortened: string;
 
+  @Column()
+  urlProd: string;
+
+  @Column()
+  urlDev: string;
+
+  @Column()
+  urlManual: string;
+
   @OneToMany(() => ProcedureType, (procedureType) => procedureType.module)
   procedureTypes: ProcedureType[];
 }
