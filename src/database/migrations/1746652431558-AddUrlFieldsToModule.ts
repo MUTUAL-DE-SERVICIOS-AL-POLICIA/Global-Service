@@ -5,17 +5,22 @@ export class AddUrlsToModules1685467894567 implements MigrationInterface {
     // Agregar las columnas urlProd, urlDev, y urlManual
     await queryRunner.addColumns('public.modules', [
       new TableColumn({
-        name: 'urlProd',
+        name: 'url_prod',
         type: 'varchar',
         isNullable: true,
       }),
       new TableColumn({
-        name: 'urlDev',
+        name: 'url_dev',
         type: 'varchar',
         isNullable: true,
       }),
       new TableColumn({
-        name: 'urlManual',
+        name: 'url_manual',
+        type: 'varchar',
+        isNullable: true,
+      }),
+      new TableColumn({
+        name: 'url_test',
         type: 'varchar',
         isNullable: true,
       }),
