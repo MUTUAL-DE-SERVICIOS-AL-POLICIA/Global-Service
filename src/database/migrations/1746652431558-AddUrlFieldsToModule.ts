@@ -30,9 +30,10 @@ export class AddUrlsToModules1685467894567 implements MigrationInterface {
   public async down(queryRunner: QueryRunner): Promise<void> {
     // Eliminar las columnas si se revierte la migración
     await queryRunner.dropColumns('public.modules', [
-      'urlProd',
-      'urlDev',
-      'urlManual',
+      'url_prod',
+      'url_dev',
+      'url_manual',
+      'url_test',
     ]);
   }
 }
