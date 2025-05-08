@@ -27,6 +27,9 @@ export class Module {
   @Column()
   urlManual: string;
 
+  @Column()
+  urlTest: string;
+
   @OneToMany(() => ProcedureType, (procedureType) => procedureType.module)
   procedureTypes: ProcedureType[];
 }
