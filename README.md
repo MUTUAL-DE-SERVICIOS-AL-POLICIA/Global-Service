@@ -34,5 +34,5 @@ $ yarn run start:prod
 
 ### en caso de cambiar modicar parametros de la generacion de TypeDoc modificar el archivo typedoc.json
 ```sh
-npx typedoc --options typedoc.json
+yarn docs
 ```

@@ -23,7 +23,8 @@
     "migration:show": "ts-node -r tsconfig-paths/register ./node_modules/.bin/typeorm migration:show -d src/database/data-source.ts",
     "migration:create": "ts-node -r tsconfig-paths/register ./node_modules/.bin/typeorm migration:create src/database/migrations/",
     "migration:run": "ts-node -r tsconfig-paths/register ./node_modules/.bin/typeorm migration:run -d src/database/data-source.ts",
-    "migration:revert": "ts-node -r tsconfig-paths/register ./node_modules/.bin/typeorm migration:revert -d src/database/data-source.ts"
+    "migration:revert": "ts-node -r tsconfig-paths/register ./node_modules/.bin/typeorm migration:revert -d src/database/data-source.ts",
+    "docs": "typedoc --options typedoc.json"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",
