@@ -6,7 +6,8 @@ import { NATS_SERVICE } from '../../config'; // Asumiendo que NATS_SERVICE es un
 
 /**
  * Servicio de utilidad para interactuar con un microservicio NATS.
- * Proporciona métodos para enviar mensajes y procesar respuestas, incluyendo manejo básico de errores.
+ * Proporciona métodos para enviar mensajes, procesar respuestas y filtrar datos,
+ * incluyendo manejo básico de errores y validación de parámetros.
  */
 export class NatsService {
   /**
@@ -23,23 +24,40 @@ export class NatsService {
   constructor(@Inject(NATS_SERVICE) private readonly client: ClientProxy) {}
 
   /**
+   * Valida si un objeto de parámetros es válido y contiene al menos un valor no nulo o indefinido.
+   * Es una función de utilidad interna.
+   * @param params El objeto a validar.
+   * @returns `true` si el objeto es válido y no está vacío (en términos de valores significativos), `false` en caso contrario.
+   * @private
+   */
+  private isValidParams(params: Record<string, unknown>): boolean {
+    return (
+      params && // Verifica que el objeto no sea nulo ni indefinido
+      typeof params === 'object' && // Verifica que sea un objeto
+      Object.values(params).some(
+        (value) => value !== null && value !== undefined,
+      ) // Verifica que al menos un valor no sea nulo/indefinido
+    );
+  }
+
+  /**
    * Envía un mensaje a un servicio NATS específico y espera la primera respuesta.
    * Utiliza `firstValueFrom` para convertir el Observable de respuesta a una Promesa.
    * Incluye manejo de errores para capturar excepciones durante la llamada al microservicio.
    *
-   * Si la llamada es exitosa, la respuesta incluirá `{ status: true }`.
-   * Si ocurre un error, devuelve `{ status: false, message: 'Microservice call failed' }` y registra el error.
+   * Si la llamada es exitosa, la respuesta incluirá `{ serviceStatus: true }`.
+   * Si ocurre un error, devuelve `{ serviceStatus: false, message: 'Microservice call failed' }` y registra el error.
    *
    * @param service El patrón del servicio NATS al que enviar el mensaje (ej. 'users.findOne').
    * @param data Los datos a enviar como payload del mensaje.
-   * @returns Una promesa que resuelve con la respuesta del microservicio (con `status: true` o `status: false`) o un objeto de error.
+   * @returns Una promesa que resuelve con la respuesta del microservicio (con `serviceStatus: true` o `serviceStatus: false`) o un objeto de error controlado.
    */
   async firstValue(service: string, data: any): Promise<any> {
     return firstValueFrom(
       this.client.send(service, data).pipe(
         map((response) => ({
           ...response,
-          status: true, // Añade un indicador de estado exitoso
+          serviceStatus: true, // Añade un indicador de estado exitoso (nombre actualizado)
         })),
         catchError((error) => {
           // Captura errores del Observable y los registra
@@ -49,7 +67,7 @@ export class NatsService {
           );
           // Devuelve un Observable con un objeto de error y estado falso
           return of({
-            status: false,
+            serviceStatus: false,
             message: 'Microservice call failed',
           });
         }),
@@ -58,29 +76,70 @@ export class NatsService {
   }
 
   /**
-   * Busca una entidad por su ID utilizando un servicio NATS específico y elimina ciertas claves de la respuesta.
-   * Si el `entityId` es nulo o la respuesta del servicio es nula, devuelve nulo.
+   * Envía parámetros a un servicio NATS, obtiene la respuesta y excluye ciertas claves.
+   * Si los parámetros iniciales no son válidos (`isValidParams` retorna false), devuelve `null`.
+   * Si la llamada a `firstValue` falla o devuelve nulo, también devuelve `null`.
+   * Las claves especificadas en `keysToOmit` son eliminadas del objeto de respuesta.
    *
-   * @param entityId El ID de la entidad a buscar (puede ser undefined).
-   * @param service El patrón del servicio NATS para buscar la entidad (ej. 'products.findOne').
+   * @param params Un objeto con los parámetros a enviar al servicio NATS (típicamente `{ id: number }`).
+   * @param service El patrón del servicio NATS al que enviar los parámetros.
    * @param keysToOmit Un array de strings con los nombres de las claves a eliminar del objeto de respuesta.
-   * @returns Una promesa que resuelve con el objeto de la entidad (sin las claves omitidas) o null si no se encuentra o falla la búsqueda.
+   * @returns Una promesa que resuelve con el objeto de respuesta del servicio (sin las claves omitidas) o `null` si los parámetros no son válidos o la llamada falla.
    */
-  async fetchAndClean(
-    entityId: number | undefined,
+  async firstValueExclude(
+    params: Record<string, unknown>,
     service: string,
     keysToOmit: string[],
-  ) {
-    if (!entityId) return null; // Si no hay ID, devuelve null inmediatamente
-
-    // Llama al microservicio para obtener los datos de la entidad
-    const data = await this.firstValue(service, { id: entityId });
-
-    if (!data) return null; // Si la respuesta del servicio es nula, devuelve null
+  ): Promise<any | null> {
+    if (!this.isValidParams(params)) {
+      return null; // Retorna null si los parámetros no son válidos
+    }
+    const data = await this.firstValue(service, params);
+    // Nota: Aquí no se verifica explícitamente `data.serviceStatus === false`.
+    // Si `firstValue` controló el error y devolvió un objeto con `serviceStatus: false`,
+    // ese objeto será procesado aquí, lo cual podría ser el comportamiento deseado.
+    // Si `firstValue` devolviera null por algún motivo no manejado (improbable con el catchError), esta línea lo capturaría.
+    if (!data) return null;
 
     // Elimina las claves especificadas del objeto de datos
     keysToOmit.forEach((key) => delete data[key]);
+    return data; // Devuelve los datos con las claves omitidas
+  }
 
-    return data; // Devuelve los datos limpios
+  /**
+   * Envía parámetros a un servicio NATS, obtiene la respuesta y crea un nuevo objeto
+   * que contiene solo las claves especificadas.
+   * Si los parámetros iniciales no son válidos (`isValidParams` retorna false), devuelve `null`.
+   * Si la llamada a `firstValue` falla o devuelve nulo, también devuelve `null`.
+   * El objeto retornado incluye solo las claves listadas en `keysToInclude` (si existen en la respuesta original)
+   * más la propiedad `serviceStatus` de la respuesta original.
+   *
+   * @param params Un objeto con los parámetros a enviar al servicio NATS.
+   * @param service El patrón del servicio NATS al que enviar los parámetros.
+   * @param keysToInclude Un array de strings con los nombres de las claves que se desean mantener en el objeto de respuesta final.
+   * @returns Una promesa que resuelve con un nuevo objeto que contiene solo las claves seleccionadas (y serviceStatus) o `null` si los parámetros no son válidos o la llamada falla.
+   */
+  async firstValueInclude(
+    params: Record<string, unknown>,
+    service: string,
+    keysToInclude: string[],
+  ): Promise<any | null> {
+    if (!this.isValidParams(params)) {
+      return null; // Retorna null si los parámetros no son válidos
+    }
+    const data = await this.firstValue(service, params);
+    // Nota: Similar a firstValueExclude, procesa la respuesta incluso si `serviceStatus` es false,
+    // manteniendo esa propiedad en el resultado final.
+    if (!data) return null;
+
+    // Crea un nuevo objeto solo con las claves seleccionadas y la propiedad serviceStatus
+    const filteredData = Object.fromEntries(
+      keysToInclude.filter((key) => key in data).map((key) => [key, data[key]]),
+    );
+
+    return {
+      ...filteredData,
+      serviceStatus: data.serviceStatus, // Incluye la propiedad serviceStatus
+    };
   }
 }
