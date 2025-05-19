@@ -14,7 +14,7 @@ export class DegreesService {
   /**
    * Instancia del Logger para registrar información o errores específicos de este servicio.
    */
-  private readonly logger = new Logger('BreakdownService'); // Nota: El nombre del logger podría confundir, se usará tal cual en la doc.
+  private readonly logger = new Logger('DegreesService');
 
   /**
    * Constructor del servicio DegreesService.

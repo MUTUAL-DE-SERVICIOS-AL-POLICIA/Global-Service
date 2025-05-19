@@ -19,7 +19,6 @@ export class DegreesController {
   /**
    * Maneja el mensaje de microservicio con el patrón 'degrees.findAll'.
    * Delega la búsqueda de todos los Grados al DegreesService.
-   * Nota: El nombre del método `findAllUnits` puede ser confuso ya que maneja "degrees". Considera renombrarlo a `findAllDegrees`.
    * @returns Una promesa que resuelve con un array de objetos Degree parciales.
    */
   @MessagePattern('degrees.findAll')
@@ -31,7 +30,6 @@ export class DegreesController {
    * Maneja el mensaje de microservicio con el patrón 'degrees.findOne'.
    * Busca un Grado específico por su ID utilizando el DegreesService.
    * Aplica un pipe para asegurar que el payload 'id' sea un número entero.
-   * Nota: El nombre del método `findOneUnits` puede ser confuso ya que maneja "degrees". Considera renombrarlo a `findOneDegrees`.
    * @param id El ID numérico del Grado extraído del payload del mensaje.
    * @returns Una promesa que resuelve con el objeto Degree completo si es encontrado, o lanza una RpcException si no se encuentra.
    */

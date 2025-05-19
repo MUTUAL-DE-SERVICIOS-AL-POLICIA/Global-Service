@@ -95,7 +95,6 @@ export class NatsService {
       return null; // Retorna null si los parámetros no son válidos
     }
     const data = await this.firstValue(service, params);
-    // Nota: Aquí no se verifica explícitamente `data.serviceStatus === false`.
     // Si `firstValue` controló el error y devolvió un objeto con `serviceStatus: false`,
     // ese objeto será procesado aquí, lo cual podría ser el comportamiento deseado.
     // Si `firstValue` devolviera null por algún motivo no manejado (improbable con el catchError), esta línea lo capturaría.
@@ -128,7 +127,6 @@ export class NatsService {
       return null; // Retorna null si los parámetros no son válidos
     }
     const data = await this.firstValue(service, params);
-    // Nota: Similar a firstValueExclude, procesa la respuesta incluso si `serviceStatus` es false,
     // manteniendo esa propiedad en el resultado final.
     if (!data) return null;
 

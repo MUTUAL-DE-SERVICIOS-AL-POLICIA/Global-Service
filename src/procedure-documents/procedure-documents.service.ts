@@ -53,7 +53,7 @@ export class ProcedureDocumentsService {
 
     if (!procedureDocument)
       throw new RpcException({
-        message: `Documento with: ${id} not found`, // Nota: Mensaje usa "Documento" en lugar de "ProcedureDocument"
+        message: `Documento with: ${id} not found`,
         code: 404,
       });
 

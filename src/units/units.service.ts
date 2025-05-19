@@ -13,10 +13,8 @@ import { RpcException } from '@nestjs/microservices';
 export class UnitsService {
   /**
    * Instancia del Logger para registrar información o errores específicos de este servicio.
-   * Nota: El nombre del logger es 'BreakdownService', quizás heredado. Considera si un nombre
-   * más acorde con 'UnitsService' sería más claro.
    */
-  private readonly logger = new Logger('BreakdownService');
+  private readonly logger = new Logger('UnitsService');
 
   /**
    * Constructor del servicio UnitsService.
@@ -34,7 +32,7 @@ export class UnitsService {
   /**
    * Busca y devuelve una lista parcial de todas las Unidades (Units) disponibles.
    * Selecciona solo los campos 'code' y 'name'.
-   * @returns Una promesa que resuelve con un array de objetos Unit parciales.
+   * @returns Una promesa que resuelve con un array de objetos Unit('code' y 'name').
    */
   async findAllUnits(): Promise<Partial<Unit>[]> {
     return this.unitsRepository.find({
