@@ -25,3 +25,14 @@ $ yarn run start:dev
 # production mode
 $ yarn run start:prod
 ```
+
+# Para generar la Documentacion de TSDoc a HTML
+
+## con TypeDoc busca y genera en base a las etiquetas TsDoc un html
+
+### usar el siguiente comando para generarlo y se creara un archivo Doc entrar y abrir el index.html para ver la documentacion de Global Service (solo de controladores servicios y dto's por el momento)
+
+### en caso de cambiar modicar parametros de la generacion de TypeDoc modificar el archivo typedoc.json
+```sh
+npx typedoc --options typedoc.json
+```
