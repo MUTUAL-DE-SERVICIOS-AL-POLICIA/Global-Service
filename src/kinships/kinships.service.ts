@@ -4,19 +4,40 @@ import { Kinship } from './entities/kinship.entity';
 import { Repository } from 'typeorm';
 import { RpcException } from '@nestjs/microservices';
 
+/**
+ * Servicio encargado de la lógica de negocio relacionada con los Parentescos (Kinships).
+ * Proporciona métodos para consultar información de (Kinship) desde la base de datos.
+ */
 @Injectable()
 export class KinshipsService {
+  /**
+   * Constructor del servicio KinshipsService.
+   * Inyecta el repositorio de TypeORM para la entidad Kinship.
+   * @param kinshipsRepository Repositorio de TypeORM para la entidad Kinship.
+   */
   constructor(
     @InjectRepository(Kinship)
     private readonly kinshipsRepository: Repository<Kinship>,
   ) {}
 
+  /**
+   * Busca y devuelve una lista parcial de todos los Parentescos (Kinships) disponibles.
+   * Selecciona solo los campos 'id' y 'name'.
+   * @returns Una promesa que resuelve con un array de objetos Kinship parciales.
+   */
   async findAll(): Promise<Partial<Kinship>[]> {
     return this.kinshipsRepository.find({
       select: ['id', 'name'],
     });
   }
 
+  /**
+   * Busca y devuelve un Parentesco (Kinship) específico por su ID.
+   * Si el parentesco no es encontrado, lanza una excepción RpcException.
+   * @param id El ID numérico del Parentesco a buscar.
+   * @returns Una promesa que resuelve con el objeto Kinship completo si es encontrado.
+   * @throws RpcException Si no se encuentra un Parentesco con el ID proporcionado (código 404).
+   */
   async findOne(id: number): Promise<Kinship> {
     const kinship = await this.kinshipsRepository.findOneBy({ id });
 
