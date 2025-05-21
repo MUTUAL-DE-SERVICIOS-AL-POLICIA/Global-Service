@@ -22,6 +22,10 @@
     "**/enums.ts",
     "**/interfaces.ts",
     "**/types.ts",
+    "**/database/**/*",  // Excluye todo dentro de la carpeta 'database'
+    "**/config/**/*",     // Excluye todo dentro de la carpeta 'config'
+    "**/common/exceptions/*", //Excluye solo la carpeta exceptions dentro de common
+    "**/common/", // Excluye solo archivos no carpetas
     // Añade aquí cualquier otro patrón de archivo que quieras excluir
     // Asegúrate de que estos patrones NO incluyan *.controller.ts, *.service.ts, *.dto.ts
     // Por que son los unicos que se documentaran con TSDoc y TypeDoc
