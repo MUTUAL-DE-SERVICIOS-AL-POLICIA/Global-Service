@@ -13,7 +13,7 @@ export class CategoriesService {
   /**
    * Constructor del servicio CategoriesService.
    * Inyecta el repositorio de TypeORM para la entidad Category.
-   * @param categoriesRepository Repositorio de TypeORM para la entidad Category, utilizado para interactuar con la tabla 'category'.
+   * @param categoriesRepository utilizado para interactuar con la tabla 'category'.
    */
   constructor(
     @InjectRepository(Category)
@@ -21,9 +21,8 @@ export class CategoriesService {
   ) {}
 
   /**
-   * Busca y devuelve una lista parcial de todas las categorías disponibles.
-   * Selecciona solo los campos necesarios para una vista general.
-   * @returns Una promesa que resuelve con un array de objetos Category parciales, conteniendo solo 'id' y 'name'.
+   * Busca y devuelve una lista solo con 'id' y 'name'. de todas las categorías disponibles.
+   * @returns Una promesa que resuelve con un array de objetos Category solo con 'id' y 'name'.
    */
   async findAll(): Promise<Partial<Category>[]> {
     return this.categoriesRepository.find({
@@ -33,7 +32,7 @@ export class CategoriesService {
 
   /**
    * Busca y devuelve una categoría específica por su ID.
-   * Si la categoría no es encontrada, lanza una excepción RpcException.
+   * Si la categoría no es encontrada, lanza una excepción RpcException(codigo 404).
    * @param id El ID numérico de la categoría a buscar.
    * @returns Una promesa que resuelve con el objeto Category completo si es encontrado.
    * @throws RpcException Si no se encuentra una categoría con el ID proporcionado (código 404).

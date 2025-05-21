@@ -10,7 +10,7 @@ import { KinshipsService } from './kinships.service';
 export class KinshipsController {
   /**
    * Constructor del controlador KinshipsController.
-   * Inyecta el servicio KinshipsService para manejar la lógica de negocio.
+   * Inyecta el servicio KinshipsService.
    * @param kinshipsService Servicio encargado de la lógica de negocio de los (Kinship).
    */
   constructor(private readonly kinshipsService: KinshipsService) {}
@@ -18,7 +18,7 @@ export class KinshipsController {
   /**
    * **Maneja el patrón de mensaje NATS 'kinships.findAll'.**
    * Delega la búsqueda de todos los Parentescos(Kinships) al KinshipsService.
-   * @returns Una promesa que resuelve con un array de objetos Kinship parciales.
+   * @returns Una promesa que resuelve con un array de objetos Kinship.
    */
   @MessagePattern('kinships.findAll')
   findAll() {
@@ -30,8 +30,7 @@ export class KinshipsController {
    * Busca un Parentesco(Kinship) específico por su ID, utilizando el KinshipsService.
    * Aplica un pipe para asegurar que el payload 'id' sea un número entero.
    * @param id El ID numérico del Parentesco extraído del payload del mensaje.
-   * @returns Una promesa que resuelve con el objeto Kinship completo si es encontrado,
-   * o lanza una RpcException si no se encuentra.
+   * @returns Una promesa que resuelve con el objeto Kinship completo si es encontrado.
    */
   @MessagePattern('kinships.findOne')
   findOne(@Payload('id', ParseIntPipe) id: number) {

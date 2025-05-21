@@ -13,10 +13,10 @@ import { RpcException } from '@nestjs/microservices';
 export class ModulesService {
   /**
    * Constructor del servicio ModulesService.
-   * Inyecta los repositorios de TypeORM para las entidades Module, ProcedureType y ProcedureModality.
-   * @param moduleRepository Repositorio de TypeORM para la entidad Module.
-   * @param procedureTypeRepository Repositorio de TypeORM para la entidad ProcedureType.
-   * @param procedureModalityRepository Repositorio de TypeORM para la entidad ProcedureModality.
+   * Inyecta los repositorios de TypeORM.
+   * @param moduleRepository Repositorio para la entidad Module.
+   * @param procedureTypeRepository Repositorio para la entidad ProcedureType.
+   * @param procedureModalityRepository Repositorio para la entidad ProcedureModality.
    */
   constructor(
     @InjectRepository(Module)
@@ -29,7 +29,7 @@ export class ModulesService {
 
   /**
    * Busca y devuelve una lista de todos los Módulos disponibles.
-   * @returns Una promesa que resuelve con un array de objetos Module completos.
+   * @returns Una promesa que resuelve con un array de objetos Module.
    */
   async findAllModules(): Promise<Module[]> {
     return this.moduleRepository.find();
@@ -37,7 +37,6 @@ export class ModulesService {
 
   /**
    * Busca y devuelve un Módulo específico por su ID.
-   * Si el módulo no es encontrado, lanza una excepción RpcException.
    * @param id El ID numérico del Módulo a buscar.
    * @returns Una promesa que resuelve con el objeto Module completo si es encontrado.
    * @throws RpcException Si no se encuentra un Módulo con el ID proporcionado (código 404).
@@ -56,8 +55,8 @@ export class ModulesService {
   }
 
   /**
-   * Busca y devuelve una lista de todos los Tipos de Trámite (ProcedureTypes) disponibles.
-   * @returns Una promesa que resuelve con un array de objetos ProcedureType completos.
+   * Busca y devuelve una lista de todos los Tipos de Trámite (ProcedureTypes).
+   * @returns Una promesa que resuelve con un array de objetos ProcedureType.
    */
   async findAllProcedureTypes(): Promise<ProcedureType[]> {
     return this.procedureTypeRepository.find();
@@ -65,29 +64,25 @@ export class ModulesService {
 
   /**
    * Busca y devuelve un Tipo de Trámite (ProcedureType) específico por su ID.
-   * Si el tipo de trámite no es encontrado, lanza una excepción RpcException.
    * @param id El ID numérico del Tipo de Trámite a buscar.
    * @returns Una promesa que resuelve con el objeto ProcedureType completo si es encontrado.
    * @throws RpcException Si no se encuentra un Tipo de Trámite con el ID proporcionado (código 404).
    */
   async findOneProcedureTypes(id: number): Promise<ProcedureType> {
     const procedureType = await this.procedureTypeRepository.findOne({
-      // Corregido: Usar procedureTypeRepository
       where: { id },
     });
     if (!procedureType)
-      // Corregido: Usar procedureType
       throw new RpcException({
         message: `ProcedureType with id ${id} not found`,
         code: 404,
       });
-
-    return procedureType; // Corregido: Usar procedureType
+    return procedureType;
   }
 
   /**
-   * Busca y devuelve una lista de todas las Modalidades de Trámite (ProcedureModality) disponibles.
-   * @returns Una promesa que resuelve con un array de objetos ProcedureModality completos.
+   * Busca y devuelve una lista de todas las Modalidades de Trámite (ProcedureModality).
+   * @returns Una promesa que resuelve con un array de objetos ProcedureModality.
    */
   async findAllProcedureModalities(): Promise<ProcedureModality[]> {
     return this.procedureModalityRepository.find();
@@ -95,7 +90,6 @@ export class ModulesService {
 
   /**
    * Busca y devuelve una Modalidad de Trámite (ProcedureModality) específica por su ID.
-   * Si la modalidad de trámite no es encontrada, lanza una excepción RpcException.
    * @param id El ID numérico de la Modalidad de Trámite a buscar.
    * @returns Una promesa que resuelve con el objeto ProcedureModality completo si es encontrado.
    * @throws RpcException Si no se encuentra una Modalidad de Trámite con el ID proporcionado (código 404).
@@ -114,10 +108,7 @@ export class ModulesService {
   }
 
   /**
-   * Método genérico para buscar una entidad (Módulo, Tipo de Trámite o Modalidad de Trámite) por su ID
-   * y cargar relaciones especificadas.
-   * Si la entidad no es encontrada, lanza una excepción RpcException.
-   *
+   * Método genérico para buscar una entidad (Módulo, Tipo de Trámite o Modalidad de Trámite) por su ID y cargar relaciones especificadas.
    * @param id El ID numérico de la entidad a buscar.
    * @param relations Un array de strings con los nombres de las relaciones a cargar.
    * @param entity El nombre de la entidad a buscar ('module', 'procedureType', o 'procedureModality').
@@ -129,15 +120,11 @@ export class ModulesService {
     relations: string[],
     entity: 'module' | 'procedureType' | 'procedureModality',
   ): Promise<any> {
-    // Se usa 'any' ya que el tipo de retorno depende del parámetro 'entity'
-    // Accede dinámicamente al repositorio correcto basado en el parámetro 'entity'
     const repository = this[`${entity}Repository`];
-
-    // Verifica que el repositorio exista (medida de seguridad, aunque el tipado limita las opciones)
     if (!repository) {
       throw new RpcException({
         message: `Invalid entity type: ${entity}`,
-        code: 400, // Bad Request
+        code: 400,
       });
     }
 

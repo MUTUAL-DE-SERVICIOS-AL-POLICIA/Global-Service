@@ -10,13 +10,13 @@ import { CategoriesService } from './categories.service';
 export class CategoriesController {
   /**
    * Constructor del controlador CategoriesController.
-   * Inyecta el servicio CategoriesService para manejar la lógica de negocio.
+   * Inyecta el servicio CategoriesService.
    * @param categoriesService Servicio encargado de la lógica de negocio de las categorías.
    */
   constructor(private readonly categoriesService: CategoriesService) {}
 
   /**
-   * Maneja el mensaje 'categories.findAll'.
+   * **Maneja el patron de mensaje NATS 'categories.findAll'.**
    * Delega la búsqueda de todas las categorías al CategoriesService.
    * @returns Una promesa que resuelve con un array de objetos Category.
    */
@@ -26,12 +26,12 @@ export class CategoriesController {
   }
 
   /**
-   * Maneja el mensaje 'categories.findOne'.
+   * **Maneja el patrón de mensaje NATS 'categories.findOne'.**
    * Busca una categoría específica por su ID, utilizando el CategoriesService.
    * Aplica un pipe para asegurar que el payload 'id' sea un número entero.
    * @param id El ID numérico de la categoría extraído del payload del mensaje.
    * @returns Una promesa que resuelve con el objeto Category completo si es encontrado,
-   * o lanza una RpcException si no se encuentra.
+   * o lanza una RpcException(codigo 404) si no se encuentra.
    */
   @MessagePattern('categories.findOne')
   findOne(@Payload('id', ParseIntPipe) id: number) {

@@ -6,8 +6,6 @@ import { RpcException } from '@nestjs/microservices';
 
 /**
  * Servicio encargado de la lógica de negocio relacionada con los Documentos de Trámite(ProcedureDocuments).
- * Proporciona métodos para consultar información de documentos desde la base de datos,
- * incluyendo filtros por campos no nulos/vacíos y búsqueda por lista de IDs.
  */
 @Injectable()
 export class ProcedureDocumentsService {
@@ -18,8 +16,8 @@ export class ProcedureDocumentsService {
 
   /**
    * Constructor del servicio ProcedureDocumentsService.
-   * Inyecta el repositorio de TypeORM para la entidad ProcedureDocument.
-   * @param procedureDocumentsRepository Repositorio de TypeORM para la entidad ProcedureDocument.
+   * Inyecta el repositorio de TypeORM.
+   * @param procedureDocumentsRepository Repositorio para la entidad ProcedureDocument.
    */
   constructor(
     @InjectRepository(ProcedureDocument)
@@ -27,10 +25,10 @@ export class ProcedureDocumentsService {
   ) {}
 
   /**
-   * Busca y devuelve una lista parcial de todos los Documentos de Trámite disponibles.
+   * Busca y devuelve una lista de todos los Documentos de Trámite.
    * Filtra los documentos para incluir solo aquellos donde el campo 'shortened' no es nulo ni una cadena vacía.
    * Selecciona los campos 'id', 'name' y 'shortened'.
-   * @returns Una promesa que resuelve con un array de objetos ProcedureDocument parciales que cumplen el criterio de filtro.
+   * @returns Una promesa que resuelve con un array de objetos ProcedureDocument con campos 'id', 'name' y 'shortened'.
    */
   async findAll(): Promise<Partial<ProcedureDocument>[]> {
     return this.procedureDocumentsRepository.find({
@@ -41,7 +39,6 @@ export class ProcedureDocumentsService {
 
   /**
    * Busca y devuelve un Documento de Trámite específico por su ID.
-   * Si el documento no es encontrado, lanza una excepción RpcException.
    * @param id El ID numérico del Documento de Trámite a buscar.
    * @returns Una promesa que resuelve con el objeto ProcedureDocument completo si es encontrado.
    * @throws RpcException Si no se encuentra un Documento de Trámite con el ID proporcionado (código 404).

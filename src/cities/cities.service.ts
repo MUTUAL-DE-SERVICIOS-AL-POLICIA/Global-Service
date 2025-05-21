@@ -13,7 +13,7 @@ export class CitiesService {
   /**
    * Constructor del servicio CitiesService.
    * Inyecta el repositorio de TypeORM para la entidad City.
-   * @param citiesRepository Repositorio de TypeORM para la entidad City, utilizado para interactuar con la tabla 'city'.
+   * @param citiesRepository utilizado para interactuar con la tabla 'city'.
    */
   constructor(
     @InjectRepository(City)
@@ -21,9 +21,9 @@ export class CitiesService {
   ) {}
 
   /**
-   * Busca y devuelve una lista parcial de todas las ciudades disponibles.
-   * Selecciona solo los campos necesarios para una vista general.
-   * @returns Una promesa que resuelve con un array de objetos City parciales, conteniendo solo campos seleccionados.
+   * Busca y devuelve una lista de todas las ciudades disponibles.
+   * Selecciona solo los campos seleccionados para una vista general.
+   * @returns Una promesa que resuelve con un array de objetos City conteniendo solo campos seleccionados.
    */
   async findAll(): Promise<Partial<City>[]> {
     return this.citiesRepository.find({
@@ -41,7 +41,7 @@ export class CitiesService {
 
   /**
    * Busca y devuelve una ciudad específica por su ID.
-   * Si la ciudad no es encontrada, lanza una excepción RpcException.
+   * Si la ciudad no es encontrada, lanza una excepción RpcException(codigo 404).
    * @param id El ID numérico de la ciudad a buscar.
    * @returns Una promesa que resuelve con el objeto City completo si es encontrado.
    * @throws RpcException Si no se encuentra una ciudad con el ID proporcionado (código 404).

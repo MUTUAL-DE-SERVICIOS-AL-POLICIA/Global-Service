@@ -10,8 +10,8 @@ import { PensionEntitiesService } from './pension-entities.service';
 export class PensionEntitiesController {
   /**
    * Constructor del controlador PensionEntitiesController.
-   * Inyecta el servicio PensionEntitiesService para manejar la lógica de negocio.
-   * @param pensionEntitiesService Servicio encargado de la lógica de negocio de las Entidades de Pensión.
+   * Inyecta el servicio PensionEntitiesService.
+   * @param pensionEntitiesService Servicio encargado de la lógica de negocio de PensionEntities.
    */
   constructor(
     private readonly pensionEntitiesService: PensionEntitiesService,
@@ -20,7 +20,7 @@ export class PensionEntitiesController {
   /**
    * **Maneja el patrón de mensaje NATS 'pensionEntities.findAll'.**
    * Delega la búsqueda de todas las Entidades de Pensión al PensionEntitiesService.
-   * @returns Una promesa que resuelve con un array de objetos PensionEntity parciales.
+   * @returns Una promesa que resuelve con un array de objetos PensionEntity.
    */
   @MessagePattern('pensionEntities.findAll')
   findAll() {
@@ -30,10 +30,8 @@ export class PensionEntitiesController {
   /**
    * **Maneja el patrón de mensaje NATS 'pensionEntities.findOne'.**
    * Busca una Entidad de Pensión específica por su ID, utilizando el PensionEntitiesService.
-   * Aplica un pipe para asegurar que el payload 'id' sea un número entero.
    * @param id El ID numérico de la Entidad de Pensión extraído del payload del mensaje.
-   * @returns Una promesa que resuelve con el objeto PensionEntity completo si es encontrado,
-   * o lanza una RpcException si no se encuentra.
+   * @returns Una promesa que resuelve con el objeto PensionEntity si es encontrado.
    */
   @MessagePattern('pensionEntities.findOne')
   findOne(@Payload('id', ParseIntPipe) id: number) {

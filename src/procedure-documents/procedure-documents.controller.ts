@@ -10,7 +10,7 @@ import { ProcedureDocumentsService } from './procedure-documents.service';
 export class ProcedureDocumentsController {
   /**
    * Constructor del controlador ProcedureDocumentsController.
-   * Inyecta el servicio ProcedureDocumentsService para manejar la lógica de negocio.
+   * Inyecta el servicio ProcedureDocumentsService
    * @param procedureDocumentsService Servicio encargado de la lógica de negocio de los Documentos de Trámite.
    */
   constructor(
@@ -19,9 +19,8 @@ export class ProcedureDocumentsController {
 
   /**
    * **Maneja el patrón de mensaje NATS 'procedureDocuments.findAll'.**
-   * Delega la búsqueda de todos los Documentos de Trámite que cumplen los criterios de filtro
-   * al ProcedureDocumentsService.
-   * @returns Una promesa que resuelve con un array de objetos ProcedureDocument parciales.
+   * Delega la búsqueda de todos los Documentos de Trámite que cumplen los criterios de filtro al ProcedureDocumentsService.
+   * @returns Una promesa que resuelve con un array de objetos ProcedureDocument.
    */
   @MessagePattern('procedureDocuments.findAll')
   findAll() {
@@ -34,7 +33,6 @@ export class ProcedureDocumentsController {
    * Aplica un pipe para asegurar que el payload 'id' sea un número entero.
    * @param id El ID numérico del Documento de Trámite extraído del payload del mensaje.
    * @returns Una promesa que resuelve con el objeto ProcedureDocument completo si es encontrado,
-   * o lanza una RpcException si no se encuentra.
    */
   @MessagePattern('procedureDocuments.findOne')
   findOne(@Payload('id', ParseIntPipe) id: number) {

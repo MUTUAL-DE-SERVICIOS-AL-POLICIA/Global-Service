@@ -11,15 +11,15 @@ import { DegreesService } from './degrees.service';
 export class DegreesController {
   /**
    * Constructor del controlador DegreesController.
-   * Inyecta el servicio DegreesService para manejar la lógica de negocio.
+   * Inyecta el servicio DegreesService.
    * @param degreesService Servicio encargado de la lógica de negocio de Grados y Jerarquías.
    */
   constructor(private readonly degreesService: DegreesService) {}
 
   /**
-   * Maneja el mensaje de microservicio con el patrón 'degrees.findAll'.
+   * **Maneja el patron de mensaje NATS 'degrees.findAll'.**
    * Delega la búsqueda de todos los Grados al DegreesService.
-   * @returns Una promesa que resuelve con un array de objetos Degree parciales.
+   * @returns Una promesa que resuelve con un array de objetos Degree.
    */
   @MessagePattern('degrees.findAll')
   findAllUnits() {
@@ -27,11 +27,11 @@ export class DegreesController {
   }
 
   /**
-   * Maneja el mensaje de microservicio con el patrón 'degrees.findOne'.
+   * **Maneja el patrón de mensaje NATS 'degrees.findOne'.**
    * Busca un Grado específico por su ID utilizando el DegreesService.
    * Aplica un pipe para asegurar que el payload 'id' sea un número entero.
    * @param id El ID numérico del Grado extraído del payload del mensaje.
-   * @returns Una promesa que resuelve con el objeto Degree completo si es encontrado, o lanza una RpcException si no se encuentra.
+   * @returns Una promesa que resuelve con el objeto Degree completo si es encontrado, o RpcException(codigo 404) si no se encuentra.
    */
   @MessagePattern('degrees.findOne')
   findOneUnits(@Payload('id', ParseIntPipe) id: number) {
@@ -39,9 +39,9 @@ export class DegreesController {
   }
 
   /**
-   * Maneja el mensaje de microservicio con el patrón 'hierarchies.findAll'.
+   * **Maneja el patrón de mensaje NATS 'hierarchies.findAll'.**
    * Delega la búsqueda de todas las Jerarquías al DegreesService.
-   * @returns Una promesa que resuelve con un array de objetos Hierarchy parciales.
+   * @returns Una promesa que resuelve con un array de objetos Hierarchy.
    */
   @MessagePattern('hierarchies.findAll')
   findAllHierarchies() {
@@ -49,11 +49,11 @@ export class DegreesController {
   }
 
   /**
-   * Maneja el mensaje de microservicio con el patrón 'hierarchies.findOne'.
+   * **Maneja el patrón de mensaje NATS 'hierarchies.findOne'.**
    * Busca una Jerarquía específica por su ID utilizando el DegreesService.
    * Aplica un pipe para asegurar que el payload 'id' sea un número entero.
    * @param id El ID numérico de la Jerarquía extraído del payload del mensaje.
-   * @returns Una promesa que resuelve con el objeto Hierarchy completo si es encontrado, o lanza una RpcException si no se encuentra.
+   * @returns Una promesa que resuelve con el objeto Hierarchy completo si es encontrado, o RpcException(codigo 404) si no se encuentra.
    */
   @MessagePattern('hierarchies.findOne')
   findOneHierarchies(@Payload('id', ParseIntPipe) id: number) {

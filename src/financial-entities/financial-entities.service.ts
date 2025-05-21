@@ -21,9 +21,9 @@ export class FinancialEntitiesService {
   ) {}
 
   /**
-   * Busca y devuelve una lista parcial de todas las Entidades Financieras disponibles.
+   * Busca y devuelve una lista de todas las Entidades Financieras disponibles.
    * Selecciona solo los campos 'id' y 'name'.
-   * @returns Una promesa que resuelve con un array de objetos FinancialEntity parciales.
+   * @returns Una promesa que resuelve con un array de objetos FinancialEntity con solo los campos 'id' y 'name'.
    */
   async findAll(): Promise<Partial<FinancialEntity>[]> {
     return this.financialEntitiesRepository.find({
@@ -33,7 +33,7 @@ export class FinancialEntitiesService {
 
   /**
    * Busca y devuelve una Entidad Financiera específica por su ID.
-   * Si la entidad financiera no es encontrada, lanza una excepción RpcException.
+   * Si la entidad financiera no es encontrada, lanza una excepción RpcException(codigo 404).
    * @param id El ID numérico de la Entidad Financiera a buscar.
    * @returns Una promesa que resuelve con el objeto FinancialEntity completo si es encontrado.
    * @throws RpcException Si no se encuentra una Entidad Financiera con el ID proporcionado (código 404).

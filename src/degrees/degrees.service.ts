@@ -32,7 +32,7 @@ export class DegreesService {
   /**
    * Busca y devuelve una lista parcial de todos los Grados (Degrees) disponibles.
    * Selecciona solo los campos 'code' y 'name'.
-   * @returns Una promesa que resuelve con un array de objetos Degree parciales.
+   * @returns Una promesa que resuelve con un array de objetos Degree con campos 'code' y 'name'.
    */
   async findAllDegrees(): Promise<Partial<Degree>[]> {
     return this.degreesRepository.find({
@@ -41,9 +41,8 @@ export class DegreesService {
   }
 
   /**
-   * Busca y devuelve un Grado (Degree) específico por su ID.
-   * Incluye la relación 'hierarchy'.
-   * Si el grado no es encontrado, lanza una excepción RpcException.
+   * Busca y devuelve un Grado (Degree) específico por su ID que incluye la relación 'hierarchy'.
+   * Si el grado no es encontrado lanza una excepción RpcException(codigo 404).
    * @param id El ID numérico del Grado a buscar.
    * @returns Una promesa que resuelve con el objeto Degree completo (incluyendo la relación 'hierarchy') si es encontrado.
    * @throws RpcException Si no se encuentra un Grado con el ID proporcionado (código 404).
@@ -66,7 +65,7 @@ export class DegreesService {
   /**
    * Busca y devuelve una lista parcial de todas las Jerarquías (Hierarchies) disponibles.
    * Selecciona solo los campos 'code' y 'name'.
-   * @returns Una promesa que resuelve con un array de objetos Hierarchy parciales.
+   * @returns Una promesa que resuelve con un array de objetos Hierarchy con campos 'code' y 'name'.
    */
   async findAllHierarchies(): Promise<Partial<Hierarchy>[]> {
     return this.hierarchiesRepository.find({
@@ -75,9 +74,8 @@ export class DegreesService {
   }
 
   /**
-   * Busca y devuelve una Jerarquía (Hierarchy) específica por su ID.
-   * Incluye la relación 'degrees'.
-   * Si la jerarquía no es encontrada, lanza una excepción RpcException.
+   * Busca y devuelve una Jerarquía (Hierarchy) específica por su ID que incluye la relación 'degrees'.
+   * Si la jerarquía no es encontrada, lanza una excepción RpcException(codigo 404).
    * @param id El ID numérico de la Jerarquía a buscar.
    * @returns Una promesa que resuelve con el objeto Hierarchy completo (incluyendo la relación 'degrees') si es encontrado.
    * @throws RpcException Si no se encuentra una Jerarquía con el ID proporcionado (código 404).

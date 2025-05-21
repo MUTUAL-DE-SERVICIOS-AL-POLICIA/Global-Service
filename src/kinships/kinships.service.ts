@@ -21,9 +21,9 @@ export class KinshipsService {
   ) {}
 
   /**
-   * Busca y devuelve una lista parcial de todos los Parentescos (Kinships) disponibles.
+   * Busca y devuelve una lista de todos los Parentescos (Kinships) disponibles.
    * Selecciona solo los campos 'id' y 'name'.
-   * @returns Una promesa que resuelve con un array de objetos Kinship parciales.
+   * @returns Una promesa que resuelve con un array de objetos Kinship con solo los campos 'id' y 'name'.
    */
   async findAll(): Promise<Partial<Kinship>[]> {
     return this.kinshipsRepository.find({
@@ -33,7 +33,7 @@ export class KinshipsService {
 
   /**
    * Busca y devuelve un Parentesco (Kinship) específico por su ID.
-   * Si el parentesco no es encontrado, lanza una excepción RpcException.
+   * Si el parentesco no es encontrado, lanza una excepción RpcException(codigo 404).
    * @param id El ID numérico del Parentesco a buscar.
    * @returns Una promesa que resuelve con el objeto Kinship completo si es encontrado.
    * @throws RpcException Si no se encuentra un Parentesco con el ID proporcionado (código 404).

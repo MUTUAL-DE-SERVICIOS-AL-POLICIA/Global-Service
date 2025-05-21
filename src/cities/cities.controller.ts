@@ -10,13 +10,13 @@ import { CitiesService } from './cities.service';
 export class CitiesController {
   /**
    * Constructor del controlador CitiesController.
-   * Inyecta el servicio CitiesService para manejar la lógica de negocio.
+   * Inyecta el servicio CitiesService.
    * @param citiesService Servicio encargado de la lógica de negocio de las ciudades.
    */
   constructor(private readonly citiesService: CitiesService) {}
 
   /**
-   * Maneja el mensaje 'cities.findAll'.
+   * **Maneja el patron de mensaje NATS 'cities.findAll'.**
    * Delega la búsqueda de todas las ciudades al CitiesService.
    * @returns Una promesa que resuelve con un array de objetos City.
    */
@@ -26,12 +26,12 @@ export class CitiesController {
   }
 
   /**
-   * Maneja el mensaje 'cities.findOne'.
+   * **Maneja el patron de mensaje NATS 'cities.findOne'.**
    * Busca una ciudad específica por su ID, utilizando el CitiesService.
    * Aplica un pipe para asegurar que el payload 'id' sea un número entero.
    * @param id El ID numérico de la ciudad extraído del payload del mensaje.
    * @returns Una promesa que resuelve con el objeto City completo si es encontrado,
-   * o lanza una RpcException si no se encuentra.
+   * o lanza una RpcException(codigo 404) si no se encuentra.
    */
   @MessagePattern('cities.findOne')
   findOne(@Payload('id', ParseIntPipe) id: number) {

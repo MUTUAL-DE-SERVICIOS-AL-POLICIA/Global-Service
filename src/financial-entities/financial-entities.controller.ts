@@ -10,7 +10,7 @@ import { FinancialEntitiesService } from './financial-entities.service';
 export class FinancialEntitiesController {
   /**
    * Constructor del controlador FinancialEntitiesController.
-   * Inyecta el servicio FinancialEntitiesService para manejar la lógica de negocio.
+   * Inyecta el servicio FinancialEntitiesService.
    * @param financialEntitiesService Servicio encargado de la lógica de negocio de las Entidades Financieras.
    */
   constructor(
@@ -20,7 +20,7 @@ export class FinancialEntitiesController {
   /**
    * **Maneja el patrón de mensaje NATS 'financialEntities.findAll'.**
    * Delega la búsqueda de todas las Entidades Financieras al FinancialEntitiesService.
-   * @returns Una promesa que resuelve con un array de objetos FinancialEntity parciales.
+   * @returns Una promesa que resuelve con un array de objetos FinancialEntity.
    */
   @MessagePattern('financialEntities.findAll')
   findAll() {
@@ -32,8 +32,7 @@ export class FinancialEntitiesController {
    * Busca una Entidad Financiera específica por su ID, utilizando el FinancialEntitiesService.
    * Aplica un pipe para asegurar que el payload 'id' sea un número entero.
    * @param id El ID numérico de la Entidad Financiera extraído del payload del mensaje.
-   * @returns Una promesa que resuelve con el objeto FinancialEntity completo si es encontrado,
-   * o lanza una RpcException si no se encuentra.
+   * @returns Una promesa que resuelve con el objeto FinancialEntity completo.
    */
   @MessagePattern('financialEntities.findOne')
   findOne(@Payload('id', ParseIntPipe) id: number) {

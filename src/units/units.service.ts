@@ -18,9 +18,9 @@ export class UnitsService {
 
   /**
    * Constructor del servicio UnitsService.
-   * Inyecta los repositorios de TypeORM para las entidades Unit y Breakdown.
-   * @param unitsRepository Repositorio de TypeORM para la entidad Unit.
-   * @param breakdownsRepository Repositorio de TypeORM para la entidad Breakdown.
+   * Inyecta los repositorios de TypeORM.
+   * @param unitsRepository Repositorio para la entidad Unit.
+   * @param breakdownsRepository Repositorio para la entidad Breakdown.
    */
   constructor(
     @InjectRepository(Unit)
@@ -30,8 +30,7 @@ export class UnitsService {
   ) {}
 
   /**
-   * Busca y devuelve una lista parcial de todas las Unidades (Units) disponibles.
-   * Selecciona solo los campos 'code' y 'name'.
+   * Busca y devuelve una lista de todas las Unidades (Units) selecciona solo los campos 'code' y 'name'.
    * @returns Una promesa que resuelve con un array de objetos Unit('code' y 'name').
    */
   async findAllUnits(): Promise<Partial<Unit>[]> {
@@ -41,11 +40,9 @@ export class UnitsService {
   }
 
   /**
-   * Busca y devuelve una Unidad (Unit) específica por su ID.
-   * Incluye la relación 'breakdown'.
-   * Si la unidad no es encontrada, lanza una excepción RpcException.
+   * Busca y devuelve una Unidad(Unit) específica por su ID incluye la relación 'breakdown'.
    * @param id El ID numérico de la Unidad a buscar.
-   * @returns Una promesa que resuelve con el objeto Unit completo (incluyendo la relación 'breakdown') si es encontrado.
+   * @returns Una promesa que resuelve con el objeto Unit (incluyendo la relación 'breakdown') si es encontrado.
    * @throws RpcException Si no se encuentra una Unidad con el ID proporcionado (código 404).
    */
   async findOneUnits(id: number): Promise<Unit> {
@@ -64,9 +61,8 @@ export class UnitsService {
   }
 
   /**
-   * Busca y devuelve una lista parcial de todos los Desgloses (Breakdowns) disponibles.
-   * Selecciona solo los campos 'code' y 'name'.
-   * @returns Una promesa que resuelve con un array de objetos Breakdown parciales.
+   * Busca y devuelve una lista de todos los Desgloses(Breakdowns) y selecciona solo los campos 'code' y 'name'.
+   * @returns Una promesa que resuelve con un array de objetos Breakdown.
    */
   async findAllBreakdowns(): Promise<Partial<Breakdown>[]> {
     return this.breakdownsRepository.find({
@@ -75,11 +71,9 @@ export class UnitsService {
   }
 
   /**
-   * Busca y devuelve un Desglose (Breakdown) específico por su ID.
-   * Incluye la relación 'units'.
-   * Si el desglose no es encontrado, lanza una excepción RpcException.
+   * Busca y devuelve un Desglose(Breakdown) específico por su ID incluye la relación 'units'.
    * @param id El ID numérico del Desglose a buscar.
-   * @returns Una promesa que resuelve con el objeto Breakdown completo (incluyendo la relación 'units') si es encontrado.
+   * @returns Una promesa que resuelve con el objeto Breakdown (incluyendo la relación 'units') si es encontrado.
    * @throws RpcException Si no se encuentra un Desglose con el ID proporcionado (código 404).
    */
   async findOneBreakdowns(id: number): Promise<Breakdown> {
