@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Kinship } from './entities/kinship.entity';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { RpcException } from '@nestjs/microservices';
 
 @Injectable()
@@ -27,5 +27,19 @@ export class KinshipsService {
       });
 
     return kinship;
+  }
+
+  async findAllByIds(
+    ids: number[],
+  ): Promise<Record<number, { id: number; name: string }>> {
+    const kinships = await this.kinshipsRepository.findBy({ id: In(ids) });
+
+    return kinships.reduce(
+      (acc, k) => {
+        acc[k.id] = { id: k.id, name: k.name };
+        return acc;
+      },
+      {} as Record<number, { id: number; name: string }>,
+    );
   }
 }
