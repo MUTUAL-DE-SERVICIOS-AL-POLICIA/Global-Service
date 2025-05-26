@@ -15,4 +15,9 @@ export class KinshipsController {
   findOne(@Payload('id', ParseIntPipe) id: number) {
     return this.kinshipsService.findOne(id);
   }
+
+  @MessagePattern('kinships.findAllByIds')
+  async findAllByIds(@Payload() data: { ids: number[] }) {
+    return this.kinshipsService.findAllByIds(data.ids);
+  }
 }
