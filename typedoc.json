@@ -1,0 +1,33 @@
+{
+  "entryPoints": ["./src"], // <-- Mantenemos el directorio como punto de entrada
+  "out": "docs",
+  "name": "Global-Service Nest.js Docs",
+  "entryPointStrategy": "expand", // <-- esto expande la busqueda dentro de "entryPoints"
+  "excludePrivate": true,
+  "excludeProtected": false,
+  "hideGenerator": true,
+  "excludeExternals": true,
+  "excludeInternal": true,
+  "intentionallyNotExported": [],
+  "includeVersion": false,
+  "disableSources": true,
+  "theme": "default",
+  "exclude": [ // <-- ¡Usamos la opción exclude!
+    "**/*.module.ts",   // Excluir archivos de módulos
+    "**/*.entity.ts",   // Excluir archivos de entidades
+    "**/*-spec.ts",     // Excluir archivos de pruebas
+    "**/main.ts",       // Excluir el archivo main.ts
+    "**/constants.ts",  // Puedes añadir otros tipos de archivos que no quieras documentar
+    "**/config.ts",
+    "**/enums.ts",
+    "**/interfaces.ts",
+    "**/types.ts",
+    "**/database/**/*",  // Excluye todo dentro de la carpeta 'database'
+    "**/config/**/*",     // Excluye todo dentro de la carpeta 'config'
+    "**/common/exceptions/*", //Excluye solo la carpeta exceptions dentro de common
+    "**/common/", // Excluye solo archivos no carpetas
+    // Añade aquí cualquier otro patrón de archivo que quieras excluir
+    // Asegúrate de que estos patrones NO incluyan *.controller.ts, *.service.ts, *.dto.ts
+    // Por que son los unicos que se documentaran con TSDoc y TypeDoc
+  ]
+}
