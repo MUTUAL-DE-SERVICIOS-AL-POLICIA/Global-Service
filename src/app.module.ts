@@ -11,6 +11,7 @@ import { CitiesModule } from './cities/cities.module';
 import { ModulesModule } from './modules/modules.module';
 import { CommonModule } from './common/common.module';
 import { DatabaseModule } from './database/database.module';
+import { FileDossiersModule } from './file-dossiers/file-dossiers.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { DatabaseModule } from './database/database.module';
     PensionEntitiesModule,
     CitiesModule,
     ModulesModule,
+    FileDossiersModule,
   ],
 })
 export class AppModule {}
