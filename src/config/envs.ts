@@ -22,7 +22,7 @@ const envsSchema = joi
     DB_PORT: joi.number().required(),
     DB_USERNAME: joi.string().required(),
     DB_SYNCHRONIZE: joi.string().valid('true', 'false').default('false'),
-    DB_SCHEMA: joi.string().default('beneficiaries'),
+    DB_SCHEMA: joi.string().default('global'),
   })
   .unknown(true);
 
