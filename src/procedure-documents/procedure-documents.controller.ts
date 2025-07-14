@@ -23,8 +23,8 @@ export class ProcedureDocumentsController {
    * @returns Una promesa que resuelve con un array de objetos ProcedureDocument.
    */
   @MessagePattern('procedureDocuments.findAll')
-  findAll() {
-    return this.procedureDocumentsService.findAll();
+  findAll(@Payload() columns: string[]) {
+    return this.procedureDocumentsService.findAll(columns);
   }
 
   /**
@@ -49,10 +49,7 @@ export class ProcedureDocumentsController {
    * y los valores son objetos `{ name: string; shortened: string }`.
    */
   @MessagePattern('procedureDocuments.findAllByIds')
-  async findAllByIds(data: {
-    ids: number[];
-    columns?: string[];
-  }) {
+  async findAllByIds(data: { ids: number[]; columns?: string[] }) {
     return this.procedureDocumentsService.findAllByIds(data.ids, data.columns);
   }
 }
