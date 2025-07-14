@@ -30,10 +30,15 @@ export class ProcedureDocumentsService {
    * Selecciona los campos 'id', 'name' y 'shortened'.
    * @returns Una promesa que resuelve con un array de objetos ProcedureDocument con campos 'id', 'name' y 'shortened'.
    */
-  async findAll(): Promise<Partial<ProcedureDocument>[]> {
+  async findAll(columns: string[]): Promise<Partial<ProcedureDocument>[]> {
+    if (columns && columns.length > 0) {
+      return this.procedureDocumentsRepository.find({
+        select: columns as (keyof ProcedureDocument)[],
+        where: [{ shortened: Not(IsNull()) }, { shortened: Not('') }],
+      });
+    }
     return this.procedureDocumentsRepository.find({
-      select: ['id', 'name', 'shortened'],
-      where: [{ shortened: Not(IsNull()) }, { shortened: Not('') }], // Condición para que 'shortened' no sea nulo o vacío
+      where: [{ shortened: Not(IsNull()) }, { shortened: Not('') }],
     });
   }
 
