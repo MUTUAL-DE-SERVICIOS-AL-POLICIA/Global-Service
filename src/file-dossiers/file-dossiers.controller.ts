@@ -13,9 +13,7 @@ export class FileDossiersController {
    * Inyecta el servicio FileDossiersService
    * @param fileDossiersService Servicio encargado de la lógica de negocio de los Documentos de Trámite.
    */
-  constructor(
-    private readonly fileDossiersService: FileDossiersService,
-  ) {}
+  constructor(private readonly fileDossiersService: FileDossiersService) {}
 
   /**
    * **Maneja el patrón de mensaje NATS 'fileDossiers.findAll'.**
@@ -49,10 +47,7 @@ export class FileDossiersController {
    * y los valores son objetos `{ name: string; shortened: string }`.
    */
   @MessagePattern('fileDossiers.findAllByIds')
-  async findAllByIds(data: {
-    ids: number[];
-    columns?: string[];
-  }) {
+  async findAllByIds(data: { ids: number[]; columns?: string[] }) {
     return this.fileDossiersService.findAllByIds(data.ids, data.columns);
   }
 }
