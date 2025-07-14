@@ -46,9 +46,7 @@ export class FileDossiersService {
    * @throws RpcException Si no se encuentra un Expediente de Trámite con el ID proporcionado (código 404).
    */
   async findOne(id: number): Promise<FileDossier> {
-    const fileDossiers = await this.fileDossiersRepository.findOneBy(
-      { id },
-    );
+    const fileDossiers = await this.fileDossiersRepository.findOneBy({ id });
 
     if (!fileDossiers)
       throw new RpcException({
@@ -66,19 +64,19 @@ export class FileDossiersService {
    * @returns Una promesa que resuelve con un objeto (mapa) donde las claves son los IDs de los documentos encontrados
    * y los valores son objetos `{ name: string; shortened: string }`. Si no se encuentran documentos para los IDs proporcionados, el mapa estará vacío o contendrá solo los encontrados.
    */
-    async findAllByIds(
-      ids: number[],
-      columns?: string[],
-    ): Promise<Partial<FileDossier>[]> {
-      const selectColumns = columns?.length
-        ? ([...columns] as (keyof FileDossier)[])
-        : undefined;
-  
-      const fileDossiers = await this.fileDossiersRepository.find({
-        where: { id: In(ids) },
-        select: selectColumns,
-      });
-  
-      return fileDossiers;
-    }
+  async findAllByIds(
+    ids: number[],
+    columns?: string[],
+  ): Promise<Partial<FileDossier>[]> {
+    const selectColumns = columns?.length
+      ? ([...columns] as (keyof FileDossier)[])
+      : undefined;
+
+    const fileDossiers = await this.fileDossiersRepository.find({
+      where: { id: In(ids) },
+      select: selectColumns,
+    });
+
+    return fileDossiers;
+  }
 }
