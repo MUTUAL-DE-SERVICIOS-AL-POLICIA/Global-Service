@@ -30,10 +30,15 @@ export class ProcedureDocumentsService {
    * Selecciona los campos 'id', 'name' y 'shortened'.
    * @returns Una promesa que resuelve con un array de objetos ProcedureDocument con campos 'id', 'name' y 'shortened'.
    */
-  async findAll(): Promise<Partial<ProcedureDocument>[]> {
+  async findAll(columns: string[]): Promise<Partial<ProcedureDocument>[]> {
+    if (columns && columns.length > 0) {
+      return this.procedureDocumentsRepository.find({
+        select: columns as (keyof ProcedureDocument)[],
+        where: [{ shortened: Not(IsNull()) }, { shortened: Not('') }],
+      });
+    }
     return this.procedureDocumentsRepository.find({
-      select: ['id', 'name', 'shortened'],
-      where: [{ shortened: Not(IsNull()) }, { shortened: Not('') }], // Condición para que 'shortened' no sea nulo o vacío
+      where: [{ shortened: Not(IsNull()) }, { shortened: Not('') }],
     });
   }
 
@@ -66,24 +71,17 @@ export class ProcedureDocumentsService {
    */
   async findAllByIds(
     ids: number[],
-  ): Promise<Record<number, { name: string; shortened: string }>> {
-    // Busca documentos cuyos IDs estén en la lista proporcionada
-    const documents = await this.procedureDocumentsRepository.findBy({
-      id: In(ids), // Usa el operador In de TypeORM
+    columns?: string[],
+  ): Promise<Partial<ProcedureDocument>[]> {
+    const selectColumns = columns?.length
+      ? ([...columns] as (keyof ProcedureDocument)[])
+      : undefined;
+
+    const documents = await this.procedureDocumentsRepository.find({
+      where: { id: In(ids) },
+      select: selectColumns,
     });
 
-    // Transforma el array de documentos encontrados a un mapa
-    const result = documents.reduce(
-      (acc: Record<number, { name: string; shortened: string }>, doc) => {
-        acc[doc.id] = {
-          name: doc.name,
-          shortened: doc.shortened || '', // Asegura que shortened sea un string vacío si es null/undefined
-        };
-        return acc;
-      },
-      {}, // Inicia el acumulador como un objeto vacío
-    );
-
-    return result;
+    return documents;
   }
 }
