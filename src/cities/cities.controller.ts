@@ -21,8 +21,8 @@ export class CitiesController {
    * @returns Una promesa que resuelve con un array de objetos City.
    */
   @MessagePattern('cities.findAll')
-  findAll() {
-    return this.citiesService.findAll();
+  findAll(@Payload() columns: string[]) {
+    return this.citiesService.findAll(columns);
   }
 
   /**
