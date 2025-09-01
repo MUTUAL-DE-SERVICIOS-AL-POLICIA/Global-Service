@@ -25,18 +25,13 @@ export class CitiesService {
    * Selecciona solo los campos seleccionados para una vista general.
    * @returns Una promesa que resuelve con un array de objetos City conteniendo solo campos seleccionados.
    */
-  async findAll(): Promise<Partial<City>[]> {
-    return this.citiesRepository.find({
-      select: [
-        'id',
-        'name',
-        'firstShortened',
-        'secondShortened',
-        'thirdShortened',
-        'companyPhones',
-        'companyCellphones',
-      ],
-    });
+  async findAll(columns?: string[]): Promise<Partial<City>[]> {
+    if (columns && columns.length > 0) {
+      return this.citiesRepository.find({
+        select: columns as (keyof City)[],
+      });
+    }
+    return this.citiesRepository.find();
   }
 
   /**
