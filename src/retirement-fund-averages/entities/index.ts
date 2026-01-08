@@ -1,0 +1,1 @@
+export { RetirementFundAverage } from './retirement-fund-average.entity';
