@@ -1,6 +1,6 @@
 ## Descripción 
 
-Microservicio de obtención de información de Tablas Generales
+Microservicio de obtención de información de Tablas Globales
 
 ## Instalar dependencias necesarias después de clonar el repositorio
 

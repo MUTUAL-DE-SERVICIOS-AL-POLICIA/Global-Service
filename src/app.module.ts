@@ -16,7 +16,7 @@ import { RetirementFundAveragesModule } from './retirement-fund-averages/retirem
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({ isGlobal: true }),
     DatabaseModule,
     CommonModule,
     ProcedureDocumentsModule,
