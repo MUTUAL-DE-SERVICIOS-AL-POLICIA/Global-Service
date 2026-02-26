@@ -1,3 +1,3 @@
-export const GENERAL_SERVICE = 'GENERAL_SERVICE';
+export const GLOBAL_SERVICE = 'GLOBAL_SERVICE';
 
 export const NATS_SERVICE = 'NATS_SERVICE';
