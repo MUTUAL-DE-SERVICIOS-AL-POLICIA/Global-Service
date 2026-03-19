@@ -1,38 +1,51 @@
-## Descripción 
+# Global-Service
 
-Microservicio de obtención de información de Tablas Globales
+## Descripción
 
-## Instalar dependencias necesarias después de clonar el repositorio
+**Global-Service** es un microservicio que gestiona la configuración global y funcionalidades transversales de la plataforma. Centraliza datos, configuraciones y servicios compartidos que son utilizados por todos los demás microservicios, proporcionando un punto único de control y estandarización.
+
+Maneja datos como:
+- Configuración global de la plataforma
+- Parámetros y valores compartidos entre servicios
+- Catálogos y datos maestros
+- Configuración de reglas de negocio
+- Información de sistema y versioning
+- Valores por defecto y políticas generales
+
+
+---
+
+## Clonar el repositorio y agregarle un nombre nuevo del nuevo proyecto
 
 ```bash
-$ yarn install
+git clone https://github.com/MUTUAL-DE-SERVICIOS-AL-POLICIA/Global-Service.git nombre-global-service
 ```
-## Configurar las variables de entorno
+
+## Inicializar proyecto
 
 ```bash
-$ cp .env.example .env
-```
+# Entrar al repositorio clonado con el nuevo nombre del proyecto
+cd nombre-global-service
 
-## Pata correr el microservicio
+# Elimina el origen remoto actual
+git remote remove origin
 
-```bash
-# development
-$ yarn run start
+# Crear el archivo .env en base al .env.template
+cp .env.template .env
 
-# watch mode
-$ yarn run start:dev
+# Instalar las dependencias
+pnpm install
 
-# production mode
-$ yarn run start:prod
-```
+# Correr proyecto en modo desarrollo
+pnpm start:dev
 
-# Para generar la Documentacion de TSDoc a HTML
+# Crear nuevo Módulo
+nest g res nombreModulo
 
-## con TypeDoc busca y genera en base a las etiquetas TsDoc un html
-
-### usar el siguiente comando para generarlo y se creara un archivo Doc entrar y abrir el index.html para ver la documentacion de Global Service (solo de controladores servicios y dto's por el momento)
-
-### en caso de cambiar modicar parametros de la generacion de TypeDoc modificar el archivo typedoc.json
-```sh
-yarn docs
+# Para enlazar a un nuevo repositorio
+git remote add origin https://github.com/tu-usuario/{nombre-global-service}.git
+git add .
+git commit -m "Inicialización del nuevo proyecto"
+git branch -M main
+git push -u origin main
 ```
