@@ -2,7 +2,7 @@
 
 ## Descripción
 
-**Global-Service** es un microservicio que gestiona la configuración global y funcionalidades transversales de la plataforma. Centraliza datos, configuraciones y servicios compartidos que son utilizados por todos los demás microservicios, proporcionando un punto único de control y estandarización.
+**Global-Service** es un microservicio que gestiona la configuración global y funcionalidades transversales de la plataforma. Centraliza datos, configuraciones y servicios compartidos que son utilizados por todos los demás microservicios, proporcionando un punto único de control y estandarización. Forma parte de una arquitectura de microservicios basada en **NestJS** y utiliza **NATS** para la comunicación asincrónica entre servicios.
 
 Maneja datos como:
 - Configuración global de la plataforma
@@ -12,6 +12,36 @@ Maneja datos como:
 - Información de sistema y versioning
 - Valores por defecto y políticas generales
 
+---
+
+## Estructura del Proyecto
+
+```
+src/
+├── app.module.ts                 # Módulo raíz que organiza todos los módulos de la aplicación
+├── main.ts                       # Punto de entrada principal de la aplicación
+├── config/                       # Módulo de configuración global
+│   ├── controllers/              # Controladores de parámetros de configuración
+│   ├── services/                 # Servicios de gestión de configuraciones
+│   └── dto/                      # Validación de datos de configuración
+├── catalogs/                     # Módulo de catálogos y datos maestros
+│   ├── controllers/              # Controladores de consulta de catálogos
+│   ├── services/                 # Servicios de gestión de datos maestros
+│   └── dto/                      # Validación de datos de catálogos
+├── parameters/                   # Módulo de parámetros del sistema
+│   ├── services/                 # Servicios de gestión de parámetros
+│   └── dto/                      # Valores y tipos de parámetros
+├── common/                       # Código compartido reutilizable en toda la aplicación
+│   ├── filters/                  # Filtros para manejo de excepciones
+│   ├── guards/                   # Guards para proteger acceso
+│   └── decorators/               # Decoradores personalizados
+├── config/                       # Archivos de configuración (BD, variables ENV, etc)
+│   └── database.config.ts        # Configuración específica de PostgreSQL
+├── database/                     # Gestión de base de datos, migraciones y datos iniciales
+│   ├── migrations/               # Migraciones TypeORM para cambios en el esquema BD
+│   ├── seeds/                    # Seeders para llenar BD con datos de prueba
+│   └── entities/                 # Entidades (modelos) que representan tablas de la BD
+```
 
 ---
 
