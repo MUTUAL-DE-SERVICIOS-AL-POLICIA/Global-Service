@@ -79,3 +79,10 @@ git commit -m "Inicialización del nuevo proyecto"
 git branch -M main
 git push -u origin main
 ```
+
+## Ejecutar Seeder
+
+```bash
+cd "/home/dgbautista/Escritorio/Denzel AVANCE/Procedures Services Launcher/Procedures-Services-Launcher/Global-Service"
+pnpm run seed:run
+```
