@@ -1,5 +1,8 @@
 import * as joi from 'joi';
 
+// Carga las variables de entorno desde el archivo .env
+process.loadEnvFile();
+
 interface EnvVars {
   NATS_SERVERS: string[];
   DB_PASSWORD: string;
