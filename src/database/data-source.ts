@@ -18,7 +18,8 @@ export const options: DataSourceOptions & SeederOptions = {
   seedTracking: true,
 
   schema: DbEnvs.dbSchema,
-  migrations: ['dist/database/migrations/**/*{.ts,.js}'],
+  migrations: [__dirname + '/migrations/**/*{.ts,.js}'],
+  migrationsTableName: 'migrations',
 };
 
 export default new DataSource(options);
