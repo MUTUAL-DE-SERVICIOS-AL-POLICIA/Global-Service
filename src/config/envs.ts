@@ -1,7 +1,4 @@
-import { config } from 'dotenv';
 import * as joi from 'joi';
-
-config({ quiet: true });
 
 interface EnvVars {
   NATS_SERVERS: string[];
@@ -24,7 +21,10 @@ const envsSchema = joi
     DB_PORT: joi.number().required(),
     DB_USERNAME: joi.string().required(),
     DB_SYNCHRONIZE: joi.string().valid('true', 'false').default('false'),
-    DB_SCHEMA: joi.string().pattern(/^[A-Za-z_][A-Za-z0-9_]*$/).default('global'),
+    DB_SCHEMA: joi
+      .string()
+      .pattern(/^[A-Za-z_][A-Za-z0-9_]*$/)
+      .default('global'),
   })
   .unknown(true);
 

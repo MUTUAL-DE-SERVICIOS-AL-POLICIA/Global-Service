@@ -93,15 +93,13 @@ migraciones. Mantenga `DB_SYNCHRONIZE=false` al trabajar con migraciones.
 pnpm migration:show
 pnpm migration:run
 
-# Llenar y consultar datos iniciales despues de migrar
-pnpm seed:show
+# Llenar datos iniciales despues de migrar
 pnpm seed:run
 
 # Crear un nuevo archivo seeder
 pnpm seed:create --name src/database/seeds/nombre-del-seed
 
-# Revertir en orden inverso
-pnpm seed:revert
+# Revertir la ultima migracion
 pnpm migration:revert
 ```
 
