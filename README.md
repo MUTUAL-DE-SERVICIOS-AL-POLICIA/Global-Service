@@ -5,6 +5,7 @@
 **Global-Service** es un microservicio que gestiona la configuración global y funcionalidades transversales de la plataforma. Centraliza datos, configuraciones y servicios compartidos que son utilizados por todos los demás microservicios, proporcionando un punto único de control y estandarización. Forma parte de una arquitectura de microservicios basada en **NestJS** y utiliza **NATS** para la comunicación asincrónica entre servicios.
 
 Maneja datos como:
+
 - Configuración global de la plataforma
 - Parámetros y valores compartidos entre servicios
 - Catálogos y datos maestros
@@ -79,3 +80,30 @@ git commit -m "Inicialización del nuevo proyecto"
 git branch -M main
 git push -u origin main
 ```
+
+## Migraciones y seeders
+
+Este servicio utiliza el esquema definido por `DB_SCHEMA`, cuyo valor esperado es
+`global`. Al inicializar los comandos de base de datos, el esquema se crea si no
+existe; TypeORM crea dentro de ese esquema la tabla de seguimiento de
+migraciones. Mantenga `DB_SYNCHRONIZE=false` al trabajar con migraciones.
+
+```bash
+# Ver y ejecutar migraciones
+pnpm migration:show
+pnpm migration:run
+
+# Llenar y consultar datos iniciales despues de migrar
+pnpm seed:show
+pnpm seed:run
+
+# Crear un nuevo archivo seeder
+pnpm seed:create --name src/database/seeds/nombre-del-seed
+
+# Revertir en orden inverso
+pnpm seed:revert
+pnpm migration:revert
+```
+
+El seeder de `accounts` registra su ejecucion y carga las cuatro cuentas
+institucionales iniciales sin duplicarlas en ejecuciones posteriores.
