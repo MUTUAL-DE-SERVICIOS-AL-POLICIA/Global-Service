@@ -14,7 +14,7 @@ export class Account {
   @Column({ type: 'varchar', length: 20 })
   state: string;
 
-  @Column({ type: 'varchar', length: 30, unique: true })
+  @Column({ type: 'varchar', length: 30, unique: true, name: 'account_number' })
   accountNumber: string;
 
   @CreateDateColumn({ name: 'created_at', type: 'timestamp' })

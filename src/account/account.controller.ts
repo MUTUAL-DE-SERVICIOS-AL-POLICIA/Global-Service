@@ -5,5 +5,15 @@ import { AccountService } from './account.service';
 @Controller()
 export class AccountController {
   constructor(private readonly accountService: AccountService) {}
+
+  @MessagePattern('global.getAccounts')
+  async getAccounts() {
+    return this.accountService.getAccounts();
+  }
+
+  @MessagePattern('global.findAllAccountsByIds')
+  async findAllAccountsByIds(data: { ids: number[]; columns?: string[] }) {
+    return this.accountService.findAllAccountsByIds(data.ids, data.columns);
+  }
   
 }
