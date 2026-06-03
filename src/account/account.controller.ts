@@ -6,9 +6,9 @@ import { AccountService } from './account.service';
 export class AccountController {
   constructor(private readonly accountService: AccountService) {}
 
-  @MessagePattern('global.getAccounts')
-  async getAccounts() {
-    return this.accountService.getAccounts();
+  @MessagePattern('global.accounts')
+  async accounts() {
+    return this.accountService.accounts();
   }
 
   @MessagePattern('global.findAllAccountsByIds')
