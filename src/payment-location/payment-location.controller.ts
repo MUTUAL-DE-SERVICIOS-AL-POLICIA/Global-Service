@@ -5,9 +5,9 @@ import { PaymentLocationService } from './payment-location.service';
 export class PaymentLocationController {
   constructor(private readonly paymentLocationService: PaymentLocationService) {}
 
-  @MessagePattern('global.getPaymentLocations')
-  async getPaymentLocations() {
-    return this.paymentLocationService.getPaymentLocations();
+  @MessagePattern('global.paymentLocations')
+  async paymentLocations() {
+    return this.paymentLocationService.paymentLocations();
   }
 
 }
