@@ -12,7 +12,7 @@ export class AccountService {
         private readonly accountRepository: Repository<Account>,
     ) {}
     
-    async getAccounts(): Promise<{
+    async accounts(): Promise<{
         error: boolean;
         message: string;
         data: Pick<Account, 'id' | 'eif' | 'name' | 'accountNumber' >[] | null;
