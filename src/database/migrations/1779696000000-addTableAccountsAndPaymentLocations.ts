@@ -5,7 +5,7 @@ function getSchema(queryRunner: QueryRunner): string {
   return options.schema ?? 'global';
 }
 
-export class AddTableAccountsAndPaymentLocations1779696000000 implements MigrationInterface {
+export class AddTableAccountsAndFinancialEntities1779696000000 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
@@ -44,20 +44,20 @@ export class AddTableAccountsAndPaymentLocations1779696000000 implements Migrati
           },
           {
             name: 'created_at',
-            type: 'timestamp',
+            type: 'timestamptz',
             default: 'CURRENT_TIMESTAMP',
             isNullable: false,
           },
           {
             name: 'updated_at',
-            type: 'timestamp',
+            type: 'timestamptz',
             default: 'CURRENT_TIMESTAMP',
             onUpdate: 'CURRENT_TIMESTAMP',
             isNullable: false,
           },
           {
             name: 'deleted_at',
-            type: 'timestamp',
+            type: 'timestamptz',
             isNullable: true,
           },
         ],
@@ -83,7 +83,7 @@ export class AddTableAccountsAndPaymentLocations1779696000000 implements Migrati
     await queryRunner.createTable(
       new Table({
         schema: getSchema(queryRunner),
-        name: 'payment_location',
+        name: 'financial_entities',
         columns: [
           {
             name: 'id',
@@ -111,20 +111,20 @@ export class AddTableAccountsAndPaymentLocations1779696000000 implements Migrati
           },
           {
             name: 'created_at',
-            type: 'timestamp',
+            type: 'timestamptz',
             default: 'CURRENT_TIMESTAMP',
             isNullable: false,
           },
           {
             name: 'updated_at',
-            type: 'timestamp',
+            type: 'timestamptz',
             default: 'CURRENT_TIMESTAMP',
             onUpdate: 'CURRENT_TIMESTAMP',
             isNullable: false,
           },
           {
             name: 'deleted_at',
-            type: 'timestamp',
+            type: 'timestamptz',
             isNullable: true,
           },
         ],
@@ -132,7 +132,7 @@ export class AddTableAccountsAndPaymentLocations1779696000000 implements Migrati
     );
 
     await queryRunner.query(`
-      INSERT INTO ${getSchema(queryRunner)}.payment_location (id, name, code, is_active)
+      INSERT INTO ${getSchema(queryRunner)}.financial_entities (id, name, code, is_active)
       VALUES
         (1, 'MUTUAL DE SERVICIOS AL POLICÍA', 'MUS', true),
         (2, 'BANCO BISA S.A.', 'BIS', true),
@@ -153,14 +153,14 @@ export class AddTableAccountsAndPaymentLocations1779696000000 implements Migrati
 
     await queryRunner.query(`
       SELECT setval(
-        pg_get_serial_sequence('${getSchema(queryRunner)}.payment_location', 'id'),
-        (SELECT MAX(id) FROM ${getSchema(queryRunner)}.payment_location)
+        pg_get_serial_sequence('${getSchema(queryRunner)}.financial_entities', 'id'),
+        (SELECT MAX(id) FROM ${getSchema(queryRunner)}.financial_entities)
       )
     `);
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable(`${getSchema(queryRunner)}.payment_location`);
+    await queryRunner.dropTable(`${getSchema(queryRunner)}.financial_entities`);
     await queryRunner.dropTable(`${getSchema(queryRunner)}.accounts`);
   }
 }
