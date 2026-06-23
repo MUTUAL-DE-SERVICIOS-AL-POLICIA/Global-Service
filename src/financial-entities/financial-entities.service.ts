@@ -2,7 +2,6 @@ import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FinancialEntity } from './entities/financial-entity.entity';
 import { Repository } from 'typeorm';
-import { RpcException } from '@nestjs/microservices';
 
 @Injectable()
 export class FinancialEntitiesService {
@@ -16,11 +15,11 @@ export class FinancialEntitiesService {
   async financialEntities(): Promise<{
     error: boolean;
     message: string;
-    data: Pick<FinancialEntity, 'id' | 'name' | 'code'>[] | null;
+    data: Pick<FinancialEntity, 'id' | 'name' | 'code' | 'isActive' | 'mldCode'>[] | null;
   }> {
     try {
       const financialEntities = await this.financialEntitiesRepository.find({
-        select: ['id', 'name', 'code'],
+        select: ['id', 'name', 'code', 'isActive', 'mldCode'],
         where: { isActive: true },
       });
 
