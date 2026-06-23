@@ -99,6 +99,8 @@ pnpm seed:run
 # Crear un nuevo archivo seeder
 pnpm seed:create --name src/database/seeds/nombre-del-seed
 
+pnpm seed:run -- --name src/database/seeds/accounts.seeder.ts
+
 # Revertir la ultima migracion
 pnpm migration:revert
 ```

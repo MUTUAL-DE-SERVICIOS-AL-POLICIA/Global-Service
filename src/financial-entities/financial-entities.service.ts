@@ -15,11 +15,11 @@ export class FinancialEntitiesService {
   async financialEntities(): Promise<{
     error: boolean;
     message: string;
-    data: Pick<FinancialEntity, 'id' | 'name' | 'code' | 'isActive' | 'mldCode'>[] | null;
+    data: Pick<FinancialEntity, 'id' | 'name' | 'code' | 'isActive' | 'eif'>[] | null;
   }> {
     try {
       const financialEntities = await this.financialEntitiesRepository.find({
-        select: ['id', 'name', 'code', 'isActive', 'mldCode'],
+        select: ['id', 'name', 'code', 'isActive', 'eif'],
         where: { isActive: true },
       });
 
