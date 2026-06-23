@@ -12,8 +12,8 @@ export class Account {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: 'varchar', length: 20 })
-  eif: string;
+  @Column({ type: 'varchar', length: 20, name: 'financial_entity_id' })
+  financialEntityId: string;
 
   @Column({ type: 'varchar', length: 120 })
   name: string;
@@ -23,6 +23,12 @@ export class Account {
 
   @Column({ type: 'varchar', length: 30, unique: true, name: 'account_number' })
   accountNumber: string;
+
+  @Column({ type: 'varchar', length: 30, name: 'ci_nit_titular' })
+  ciNitTitular: string;
+
+  @Column({ type: 'varchar', length: 30, default: '0' })
+  cta: string;
 
   @CreateDateColumn({
     name: 'created_at',

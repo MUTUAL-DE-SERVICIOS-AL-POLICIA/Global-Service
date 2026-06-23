@@ -1,5 +1,5 @@
 import { Controller } from '@nestjs/common';
-import { MessagePattern, Payload } from '@nestjs/microservices';
+import { MessagePattern } from '@nestjs/microservices';
 import { AccountService } from './account.service';
 
 @Controller()
@@ -10,10 +10,4 @@ export class AccountController {
   async accounts() {
     return this.accountService.accounts();
   }
-
-  @MessagePattern('global.findAllAccountsByIds')
-  async findAllAccountsByIds(data: { ids: number[]; columns?: string[] }) {
-    return this.accountService.findAllAccountsByIds(data.ids, data.columns);
-  }
-  
 }
