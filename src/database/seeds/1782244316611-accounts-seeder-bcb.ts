@@ -20,8 +20,8 @@ type BcbAccount = {
   estado?: string;
 };
 
-export default class AccountsSeeder implements Seeder {
-  track = true;
+export class AccountsSeederBcb1782244316611 implements Seeder {
+    track = true;
 
   async run(dataSource: DataSource): Promise<void> {
     const accountRepository = dataSource.getRepository(Account);
