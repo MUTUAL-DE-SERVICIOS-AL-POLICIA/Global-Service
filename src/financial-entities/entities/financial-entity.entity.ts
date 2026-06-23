@@ -21,8 +21,8 @@ export class FinancialEntity {
   @Column({ type: 'boolean', default: true, name: 'is_active' })
   isActive: boolean;
 
-  @Column({ type: 'varchar', length: 20, unique: true, nullable: true, name: 'mld_code' })
-  mldCode: string | null;
+  @Column({ type: 'varchar', length: 20, unique: true, nullable: true, name: 'eif' })
+  eif: string | null;
 
   @CreateDateColumn({
     name: 'created_at',

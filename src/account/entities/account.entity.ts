@@ -12,8 +12,8 @@ export class Account {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: 'varchar', length: 20, name: 'financial_entity_id' })
-  financialEntityId: string;
+  @Column({ type: 'integer', name: 'financial_entity_id' })
+  financialEntityId: number;
 
   @Column({ type: 'varchar', length: 120 })
   name: string;
