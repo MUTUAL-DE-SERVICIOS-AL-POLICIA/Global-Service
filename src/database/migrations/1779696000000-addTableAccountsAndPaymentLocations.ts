@@ -160,6 +160,23 @@ export class AddTableAccountsAndFinancialEntities1779696000000 implements Migrat
         ],
       }),
     );
+
+    await queryRunner.query(`
+      INSERT INTO ${getSchema(queryRunner)}.accounts
+        (id, financial_entity_id, name, state, account_number, cta, ci_nit_titular)
+      VALUES
+        (1, 14, 'SERVICIOS VARIOS', 'activo', '133175642', '0', '234578021'),
+        (2, 14, 'AUXILIO MORTUORIO', 'activo', '133175741', '0', '234578021'),
+        (3, 14, 'PRÉSTAMOS Y DIVIDENDOS', 'activo', '133175676', '0', '234578021'),
+        (4, 14, 'FONDO DE RETIRO Y CUOTA MORTUORIA', 'activo', '133175733', '0', '234578021')
+    `);
+
+    await queryRunner.query(`
+      SELECT setval(
+        pg_get_serial_sequence('${getSchema(queryRunner)}.accounts', 'id'),
+        (SELECT MAX(id) FROM ${getSchema(queryRunner)}.accounts)
+      )
+    `);
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {

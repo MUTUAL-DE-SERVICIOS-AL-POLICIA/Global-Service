@@ -2,6 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { In, Repository } from 'typeorm';
 import { Account } from './entities/account.entity';
 import { InjectRepository } from '@nestjs/typeorm/dist/common/typeorm.decorators';
+import { FinancialEntity } from '../financial-entities/entities/financial-entity.entity';
 
 @Injectable()
 export class AccountService {
@@ -10,6 +11,8 @@ export class AccountService {
   constructor(
     @InjectRepository(Account)
     private readonly accountRepository: Repository<Account>,
+    @InjectRepository(FinancialEntity)
+    private readonly financialEntityRepository: Repository<FinancialEntity>,
   ) {}
 
   async accounts(): Promise<{
@@ -56,4 +59,82 @@ export class AccountService {
     }
   }
 
+  async accountsAllData(): Promise<{
+    error: boolean;
+    message: string;
+    data:
+      | {
+          id: number;
+          name: string;
+          state: string;
+          accountNumber: string;
+          ciNitTitular: string;
+          cta: string;
+          financialEntity: Pick<
+            FinancialEntity,
+            'id' | 'name' | 'code' | 'isActive' | 'eif'
+          > | null;
+        }[]
+      | null;
+  }> {
+    try {
+      const accounts = await this.accountRepository.find({
+        select: [
+          'id',
+          'financialEntityId',
+          'name',
+          'state',
+          'accountNumber',
+          'ciNitTitular',
+          'cta',
+        ],
+      });
+      const financialEntityIds = [
+        ...new Set(accounts.map((account) => account.financialEntityId)),
+      ];
+
+      const financialEntities = financialEntityIds.length
+        ? await this.financialEntityRepository.find({
+            select: ['id', 'name', 'code', 'isActive', 'eif'],
+            where: { id: In(financialEntityIds) },
+          })
+        : [];
+
+      const financialEntitiesById = new Map(
+        financialEntities.map((financialEntity) => [
+          financialEntity.id,
+          financialEntity,
+        ]),
+      );
+
+      return {
+        error: false,
+        message: 'Cuentas obtenidas correctamente',
+        data: accounts.map((account) => {
+          const financialEntity =
+            financialEntitiesById.get(account.financialEntityId) ?? null;
+
+          return {
+            id: account.id,
+            name: account.name,
+            state: account.state,
+            accountNumber: account.accountNumber,
+            ciNitTitular: account.ciNitTitular,
+            cta: account.cta,
+            financialEntity,
+          };
+        }),
+      };
+    } catch (error) {
+      this.logger.error(
+        `Error al obtener todas las cuentas: ${error.message}`,
+        error.stack,
+      );
+      return {
+        error: true,
+        message: 'Error al obtener todas las cuentas',
+        data: null,
+      };
+    }
+  }
 }

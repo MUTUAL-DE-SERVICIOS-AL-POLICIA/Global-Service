@@ -1,20 +1,15 @@
 import { ClientProxy, ClientProxyFactory, Transport } from '@nestjs/microservices';
-import { DataSource, FindOptionsWhere, Repository } from 'typeorm';
+import { DataSource, In } from 'typeorm';
 import { Seeder } from 'typeorm-extension';
 import { firstValueFrom, timeout } from 'rxjs';
 import { Account } from '../../account/entities/account.entity';
 import { FinancialEntity } from '../../financial-entities/entities/financial-entity.entity';
 import { NastEnvs } from '../../config';
 
-type SeedAccount = {
-  id: number;
-  financialEntityId: number;
-  name: string;
-  state: string;
-  accountNumber: string;
-  cta: string;
-  ciNitTitular: string;
-};
+type BcbSyncAccount = Pick<
+  Account,
+  'id' | 'financialEntityId' | 'name' | 'state' | 'accountNumber' | 'ciNitTitular'
+>;
 
 type BcbAccount = {
   eif?: string;
@@ -25,56 +20,30 @@ type BcbAccount = {
   estado?: string;
 };
 
-const ACCOUNTS: SeedAccount[] = [
-  {
-    id: 1,
-    financialEntityId: 14,
-    name: 'SERVICIOS VARIOS',
-    state: 'activo',
-    accountNumber: '1-33175642',
-    cta: '0',
-    ciNitTitular: '234578021',
-  },
-  {
-    id: 2,
-    financialEntityId: 14,
-    name: 'AUXILIO MORTUORIO',
-    state: 'activo',
-    accountNumber: '1-33175741',
-    cta: '0',
-    ciNitTitular: '234578021',
-  },
-  {
-    id: 3,
-    financialEntityId: 14,
-    name: 'PRÉSTAMOS Y DIVIDENDOS',
-    state: 'activo',
-    accountNumber: '1-33175676',
-    cta: '0',
-    ciNitTitular: '234578021',
-  },
-  {
-    id: 4,
-    financialEntityId: 14,
-    name: 'FONDO DE RETIRO Y CUOTA MORTUORIA',
-    state: 'activo',
-    accountNumber: '1-33175733',
-    cta: '0',
-    ciNitTitular: '234578021',
-  },
-];
-
 export default class AccountsSeeder implements Seeder {
   track = true;
 
   async run(dataSource: DataSource): Promise<void> {
     const accountRepository = dataSource.getRepository(Account);
+    const accounts = await accountRepository.find({
+      select: [
+        'id',
+        'financialEntityId',
+        'name',
+        'state',
+        'accountNumber',
+        'ciNitTitular',
+      ],
+    });
 
-    for (const account of ACCOUNTS) {
-      await this.upsertLocalAccount(accountRepository, account);
+    if (accounts.length === 0) {
+      return;
     }
 
-    const financialEntityEifs = await this.getFinancialEntityEifs(dataSource);
+    const financialEntityEifs = await this.getFinancialEntityEifs(
+      dataSource,
+      accounts,
+    );
     const client = ClientProxyFactory.create({
       transport: Transport.NATS,
       options: {
@@ -87,7 +56,7 @@ export default class AccountsSeeder implements Seeder {
     try {
       let bcbAccounts = await this.getBcbAccounts(client);
 
-      for (const account of ACCOUNTS) {
+      for (const account of accounts) {
         const financialEntityEif = financialEntityEifs.get(account.financialEntityId);
 
         if (!financialEntityEif) {
@@ -116,28 +85,24 @@ export default class AccountsSeeder implements Seeder {
           throw new Error(`BCB no devolvio cta para la cuenta ${account.name}`);
         }
 
-        await this.upsertLocalAccount(accountRepository, {
-          ...account,
-          cta: bcbAccount.cta,
-        });
+        await accountRepository.update({ id: account.id }, { cta: bcbAccount.cta });
       }
     } finally {
       await client.close();
     }
-
-    await this.syncAccountSequence(dataSource);
   }
 
   private async getFinancialEntityEifs(
     dataSource: DataSource,
+    accounts: BcbSyncAccount[],
   ): Promise<Map<number, string>> {
     const financialEntityIds = [
-      ...new Set(ACCOUNTS.map((account) => account.financialEntityId)),
+      ...new Set(accounts.map((account) => account.financialEntityId)),
     ];
     const financialEntityRepository = dataSource.getRepository(FinancialEntity);
     const financialEntities = await financialEntityRepository.find({
       select: ['id', 'eif'],
-      where: financialEntityIds.map((id) => ({ id })),
+      where: { id: In(financialEntityIds) },
     });
 
     return new Map(
@@ -169,7 +134,7 @@ export default class AccountsSeeder implements Seeder {
   private async createBcbAccount(
     client: ClientProxy,
     financialEntityEif: string,
-    account: SeedAccount,
+    account: BcbSyncAccount,
   ): Promise<void> {
     const response = await this.sendBcbMessage(client, 'bcb.createAccount', {
       eif: financialEntityEif,
@@ -193,7 +158,7 @@ export default class AccountsSeeder implements Seeder {
   private findBcbAccount(
     accounts: BcbAccount[],
     financialEntityEif: string,
-    account: SeedAccount,
+    account: BcbSyncAccount,
   ): BcbAccount | undefined {
     return accounts.find(
       (bcbAccount) =>
@@ -202,41 +167,7 @@ export default class AccountsSeeder implements Seeder {
     );
   }
 
-  private async upsertLocalAccount(
-    accountRepository: Repository<Account>,
-    account: SeedAccount,
-  ): Promise<void> {
-    const where: FindOptionsWhere<Account>[] = [
-      { id: account.id },
-      { accountNumber: account.accountNumber },
-    ];
-
-    const existingAccount = await accountRepository.findOne({ where });
-
-    await accountRepository.save({
-      ...(existingAccount ?? {}),
-      id: existingAccount?.id ?? account.id,
-      financialEntityId: account.financialEntityId,
-      name: account.name,
-      state: account.state,
-      accountNumber: account.accountNumber,
-      cta: account.cta,
-      ciNitTitular: account.ciNitTitular,
-    });
-  }
-
   private toBcbAccountNumber(accountNumber: string): string {
     return accountNumber.replace(/\D/g, '');
-  }
-
-  private async syncAccountSequence(dataSource: DataSource): Promise<void> {
-    const schema = (dataSource.options as { schema?: string }).schema ?? 'global';
-
-    await dataSource.query(`
-      SELECT setval(
-        pg_get_serial_sequence('${schema}.accounts', 'id'),
-        COALESCE((SELECT MAX(id) FROM ${schema}.accounts), 1)
-      )
-    `);
   }
 }
