@@ -1,5 +1,5 @@
-import { Controller, ParseIntPipe } from '@nestjs/common';
-import { MessagePattern, Payload } from '@nestjs/microservices';
+import { Controller } from '@nestjs/common';
+import { MessagePattern } from '@nestjs/microservices';
 import { FinancialEntitiesService } from './financial-entities.service';
 
 @Controller()
