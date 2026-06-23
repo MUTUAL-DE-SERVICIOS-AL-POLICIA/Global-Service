@@ -10,4 +10,10 @@ export class AccountController {
   async accounts() {
     return this.accountService.accounts();
   }
+
+  // mostrar todas las cuentas con todos sus datos, incluyendo el contenido financialEntityId
+  @MessagePattern('global.accountsAllData')
+  async accountsAllData() {
+    return this.accountService.accountsAllData();
+  }
 }
