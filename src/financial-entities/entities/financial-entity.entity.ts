@@ -7,7 +7,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-@Entity({ name: 'financial_entities', synchronize: false })
+@Entity({ schema: 'public', name: 'financial_entities', synchronize: false })
 export class FinancialEntity {
   @PrimaryGeneratedColumn()
   id: number;
@@ -15,13 +15,19 @@ export class FinancialEntity {
   @Column({ type: 'varchar', length: 255 })
   name: string;
 
-  @Column({ type: 'varchar', length: 10, unique: true })
-  code: string;
+  @Column({ type: 'varchar', length: 10, unique: true, nullable: true })
+  code: string | null;
 
-  @Column({ type: 'boolean', default: true, name: 'is_active' })
-  isActive: boolean;
+  @Column({ type: 'boolean', nullable: true, name: 'is_active' })
+  isActive: boolean | null;
 
-  @Column({ type: 'varchar', length: 20, unique: true, nullable: true, name: 'eif' })
+  @Column({
+    type: 'varchar',
+    length: 20,
+    unique: true,
+    nullable: true,
+    name: 'eif',
+  })
   eif: string | null;
 
   @CreateDateColumn({
