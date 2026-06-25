@@ -82,41 +82,27 @@ export class AddTableAccountsAndFinancialEntities1779696000000 implements Migrat
 
     await queryRunner.query(`
       DELETE FROM public.financial_entities
-      WHERE (id = 9 AND name = 'MUTUAL DE SERVICIOS AL POLICÍA')
-         OR (id = 15 AND name = 'BANCO FASSIL S.A.')
-    `);
-
-    await queryRunner.query(`
-      UPDATE public.financial_entities financial_entity
-      SET name = financial_entity_data.name,
-          code = financial_entity_data.code,
-          is_active = financial_entity_data.is_active,
-          eif = financial_entity_data.eif
-      FROM (
-        VALUES
-          (1, 'BANCO UNIÓN S.A.', 'BUN', true, 'MLD1014'),
-          (2, 'BANCO SOLIDARIO S.A.', 'BSO', true, null),
-          (3, 'BANCO NACIONAL DE BOLIVIA S.A.', 'BNB', true, null),
-          (4, 'BANCO BISA S.A.', 'BIS', true, null),
-          (5, 'BANCO DE CRÉDITO DE BOLIVIA S.A.', 'BCR', true, null),
-          (6, 'BANCO FORTALEZA S.A.', 'BFO', true, null),
-          (7, 'BANCO GANADERO S.A.', 'BGA', true, null),
-          (8, 'BANCO MERCANTIL SANTA CRUZ S.A.', 'BME', true, null),
-          (10, 'BANCO ECONOMICO S.A.', 'BEC', true, null),
-          (11, 'BANCO PRODEM S.A.', 'BPR', true, null),
-          (12, 'BANCO FASSIL S.A.', 'FAS', false, null),
-          (13, 'BANCO FIE (BANCO PARA EL FOMENTO A INICIATIVAS ECONÓMICAS S.A.)', 'BIE', true, null),
-          (14, 'BANCO PYME ECOFUTURO S.A.', 'PEF', true, null)
-      ) AS financial_entity_data(id, name, code, is_active, eif)
-      WHERE financial_entity.id = financial_entity_data.id
+      WHERE id > 14
     `);
 
     await queryRunner.query(`
       INSERT INTO public.financial_entities
         (id, name, code, is_active, eif, created_at, updated_at)
       VALUES
-        (15, 'BANCO DE LA NACIÓN ARGENTINA', 'BNA', true, null, ${LOCAL_TIMESTAMP}, ${LOCAL_TIMESTAMP}),
-        (16, 'MUTUAL DE SERVICIOS AL POLICÍA', 'MUS', true, null, ${LOCAL_TIMESTAMP}, ${LOCAL_TIMESTAMP})
+        (1, 'BANCO UNIÓN S.A.', 'BUN', true, 'MLD1014', ${LOCAL_TIMESTAMP}, ${LOCAL_TIMESTAMP}),
+        (2, 'BANCO SOLIDARIO S.A.', 'BSO', true, null, ${LOCAL_TIMESTAMP}, ${LOCAL_TIMESTAMP}),
+        (3, 'BANCO NACIONAL DE BOLIVIA S.A.', 'BNB', true, null, ${LOCAL_TIMESTAMP}, ${LOCAL_TIMESTAMP}),
+        (4, 'BANCO BISA S.A.', 'BIS', true, null, ${LOCAL_TIMESTAMP}, ${LOCAL_TIMESTAMP}),
+        (5, 'BANCO DE CRÉDITO DE BOLIVIA S.A.', 'BCR', true, null, ${LOCAL_TIMESTAMP}, ${LOCAL_TIMESTAMP}),
+        (6, 'BANCO FORTALEZA S.A.', 'BFO', true, null, ${LOCAL_TIMESTAMP}, ${LOCAL_TIMESTAMP}),
+        (7, 'BANCO GANADERO S.A.', 'BGA', true, null, ${LOCAL_TIMESTAMP}, ${LOCAL_TIMESTAMP}),
+        (8, 'BANCO MERCANTIL SANTA CRUZ S.A.', 'BME', true, null, ${LOCAL_TIMESTAMP}, ${LOCAL_TIMESTAMP}),
+        (9, 'MUTUAL DE SERVICIOS AL POLICÍA', 'MUS', true, null, ${LOCAL_TIMESTAMP}, ${LOCAL_TIMESTAMP}),
+        (10, 'BANCO ECONOMICO S.A.', 'BEC', true, null, ${LOCAL_TIMESTAMP}, ${LOCAL_TIMESTAMP}),
+        (11, 'BANCO PRODEM S.A.', 'BPR', true, null, ${LOCAL_TIMESTAMP}, ${LOCAL_TIMESTAMP}),
+        (12, 'BANCO FASSIL S.A.', 'FAS', false, null, ${LOCAL_TIMESTAMP}, ${LOCAL_TIMESTAMP}),
+        (13, 'BANCO FIE (BANCO PARA EL FOMENTO A INICIATIVAS ECONÓMICAS S.A.)', 'BIE', true, null, ${LOCAL_TIMESTAMP}, ${LOCAL_TIMESTAMP}),
+        (14, 'BANCO PYME ECOFUTURO S.A.', 'PEF', true, null, ${LOCAL_TIMESTAMP}, ${LOCAL_TIMESTAMP})
       ON CONFLICT (id) DO UPDATE
       SET name = EXCLUDED.name,
           code = EXCLUDED.code,
@@ -300,12 +286,6 @@ export class AddTableAccountsAndFinancialEntities1779696000000 implements Migrat
 
     await queryRunner.query(`
       DROP INDEX IF EXISTS public.financial_entities_code_unique_idx
-    `);
-
-    await queryRunner.query(`
-      DELETE FROM public.financial_entities
-      WHERE (id = 15 AND name = 'BANCO DE LA NACIÓN ARGENTINA')
-         OR (id = 16 AND name = 'MUTUAL DE SERVICIOS AL POLICÍA')
     `);
 
     await queryRunner.query(`

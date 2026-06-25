@@ -19,7 +19,7 @@ export class FinancialEntitiesController {
     return this.financialEntitiesService.findOne(id);
   }
 
-  @MessagePattern('global.financialEntities')
+  @MessagePattern('financialEntities.findAllForSales')
   async financialEntities() {
     return this.financialEntitiesService.financialEntities();
   }
