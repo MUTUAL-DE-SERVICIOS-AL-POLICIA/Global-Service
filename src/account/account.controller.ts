@@ -16,4 +16,10 @@ export class AccountController {
   async accountsAllData() {
     return this.accountService.accountsAllData();
   }
+
+  @MessagePattern('global.findAllAccountsByIds')
+  async findAllAccountsByIds(data: { ids: number[]; columns?: string[] }) {
+    return this.accountService.findAllAccountsByIds(data.ids, data.columns);
+  }
+  
 }

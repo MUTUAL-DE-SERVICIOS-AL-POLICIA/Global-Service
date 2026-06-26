@@ -137,4 +137,39 @@ export class AccountService {
       };
     }
   }
+
+  async findAllAccountsByIds(
+        ids: number[],
+        columns?: string[],
+    ): Promise<any[]> {
+        try {
+            if (!ids || ids.length === 0) {
+                return [];
+            }
+
+            const hasShortened = columns?.includes('shortened');
+
+            // Mapeamos 'shortened' a 'accountNumber' para la consulta DB ya que no es una columna real
+            const dbColumns = columns?.map(col => col === 'shortened' ? 'accountNumber' : col) as (keyof Account)[];
+
+            const accounts = await this.accountRepository.find({
+                where: { id: In(ids) },
+                select: dbColumns,
+            });
+
+            if (hasShortened) {
+                return accounts.map(acc => {
+                    const res: any = { ...acc };
+                    // Map to 'shortened'
+                    res.shortened = acc.accountNumber;
+                    return res;
+                });
+            }
+
+            return accounts;
+        } catch (error) {
+            this.logger.error(`Error en findAllAccountsByIds con IDs ${ids}: ${error.message}`, error.stack);
+            throw error;
+        }
+    }
 }
