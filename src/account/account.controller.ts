@@ -6,18 +6,18 @@ import { AccountService } from './account.service';
 export class AccountController {
   constructor(private readonly accountService: AccountService) {}
 
-  @MessagePattern('global.accounts')
+  @MessagePattern('accounts.findAll')
   async accounts() {
     return this.accountService.accounts();
   }
 
   // mostrar todas las cuentas con todos sus datos, incluyendo el contenido financialEntityId
-  @MessagePattern('global.accountsAllData')
+  @MessagePattern('accounts.findAllData')
   async accountsAllData() {
     return this.accountService.accountsAllData();
   }
 
-  @MessagePattern('global.findAllAccountsByIds')
+  @MessagePattern('accounts.findAllByIds')
   async findAllAccountsByIds(data: { ids: number[]; columns?: string[] }) {
     return this.accountService.findAllAccountsByIds(data.ids, data.columns);
   }
