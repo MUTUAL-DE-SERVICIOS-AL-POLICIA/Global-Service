@@ -48,8 +48,8 @@ export class AccountService {
       };
     } catch (error) {
       this.logger.error(
-        `Error al obtener las cuentas: ${error.message}`,
-        error.stack,
+        `Error al obtener las cuentas: ${error}`,
+        error,
       );
       return {
         error: true,
@@ -127,8 +127,8 @@ export class AccountService {
       };
     } catch (error) {
       this.logger.error(
-        `Error al obtener todas las cuentas: ${error.message}`,
-        error.stack,
+        `Error al obtener todas las cuentas: ${error}`,
+        error,
       );
       return {
         error: true,
@@ -168,7 +168,7 @@ export class AccountService {
 
             return accounts;
         } catch (error) {
-            this.logger.error(`Error en findAllAccountsByIds con IDs ${ids}: ${error.message}`, error.stack);
+            this.logger.error(`Error en findAllAccountsByIds con IDs ${ids}: ${error}`);
             throw error;
         }
     }
