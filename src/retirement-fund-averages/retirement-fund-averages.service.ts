@@ -29,7 +29,7 @@ export class RetirementFundAveragesService {
         serviceStatus: true
       };
     } catch (error) {
-      this.logger.error(`Error al obtener promedios de fondo de retiro: ${error.message}`);
+      this.logger.error(`Error al obtener promedios de fondo de retiro: ${error}`);
       return {
         data: [],
         serviceStatus: false
@@ -59,7 +59,7 @@ export class RetirementFundAveragesService {
         serviceStatus: true
       };
     } catch (error) {
-      this.logger.error(`Error al obtener promedio de fondo de retiro ${id}: ${error.message}`);
+      this.logger.error(`Error al obtener promedio de fondo de retiro ${id}: ${error}`);
       return {
         data: null,
         serviceStatus: false
@@ -84,7 +84,7 @@ export class RetirementFundAveragesService {
         serviceStatus: true
       };
     } catch (error) {
-      this.logger.error(`Error al obtener promedios por degreeId ${degreeId}: ${error.message}`);
+      this.logger.error(`Error al obtener promedios por degreeId ${degreeId}: ${error}`);
       return {
         data: [],
         serviceStatus: false
@@ -109,7 +109,7 @@ export class RetirementFundAveragesService {
         serviceStatus: true
       };
     } catch (error) {
-      this.logger.error(`Error al obtener promedios por categoryId ${categoryId}: ${error.message}`);
+      this.logger.error(`Error al obtener promedios por categoryId ${categoryId}: ${error}`);
       return {
         data: [],
         serviceStatus: false
@@ -139,7 +139,7 @@ export class RetirementFundAveragesService {
         serviceStatus: true
       };
     } catch (error) {
-      this.logger.error(`Error al obtener promedio para degreeId ${degreeId}, categoryId ${categoryId}: ${error.message}`);
+      this.logger.error(`Error al obtener promedio para degreeId ${degreeId}, categoryId ${categoryId}: ${error}`);
       return {
         data: null,
         serviceStatus: false

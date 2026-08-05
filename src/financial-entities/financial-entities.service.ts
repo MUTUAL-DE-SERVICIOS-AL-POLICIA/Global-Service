@@ -20,24 +20,12 @@ export class FinancialEntitiesService {
     private readonly financialEntitiesRepository: Repository<FinancialEntity>,
   ) {}
 
-  /**
-   * Busca y devuelve una lista de todas las Entidades Financieras disponibles.
-   * Selecciona solo los campos 'id' y 'name'.
-   * @returns Una promesa que resuelve con un array de objetos FinancialEntity con solo los campos 'id' y 'name'.
-   */
   async findAll(): Promise<Partial<FinancialEntity>[]> {
     return this.financialEntitiesRepository.find({
       select: ['id', 'name'],
     });
   }
 
-  /**
-   * Busca y devuelve una Entidad Financiera específica por su ID.
-   * Si la entidad financiera no es encontrada, lanza una excepción RpcException(codigo 404).
-   * @param id El ID numérico de la Entidad Financiera a buscar.
-   * @returns Una promesa que resuelve con el objeto FinancialEntity completo si es encontrado.
-   * @throws RpcException Si no se encuentra una Entidad Financiera con el ID proporcionado (código 404).
-   */
   async findOne(id: number): Promise<FinancialEntity> {
     const financialEntity = await this.financialEntitiesRepository.findOneBy({
       id,
@@ -48,5 +36,75 @@ export class FinancialEntitiesService {
         code: 404,
       });
     return financialEntity;
+  }
+
+  async searchByEif(eif: string): Promise<{
+    error: boolean;
+    message: string;
+    data: Pick<FinancialEntity, 'name' | 'code'> | null;
+  }> {
+    const normalizedEif = eif?.trim().toUpperCase();
+
+    if (!normalizedEif) {
+      return {
+        error: true,
+        message: 'El EIF es requerido',
+        data: null,
+      };
+    }
+
+    try {
+      const financialEntity = await this.financialEntitiesRepository.findOne({
+        select: ['name', 'code'],
+        where: { eif: normalizedEif },
+      });
+
+      if (!financialEntity) {
+        return {
+          error: true,
+          message: `No se encontró una entidad financiera con el EIF ${normalizedEif}`,
+          data: null,
+        };
+      }
+
+      return {
+        error: false,
+        message: 'Entidad financiera obtenida correctamente',
+        data: financialEntity,
+      };
+    } catch {
+      return {
+        error: true,
+        message: 'Error al buscar la entidad financiera por EIF',
+        data: null,
+      };
+    }
+  }
+
+  async financialEntities(): Promise<{
+    error: boolean;
+    message: string;
+    data:
+      | Pick<FinancialEntity, 'id' | 'name' | 'code' | 'isActive' | 'eif'>[]
+      | null;
+  }> {
+    try {
+      const financialEntities = await this.financialEntitiesRepository.find({
+        select: ['id', 'name', 'code', 'isActive', 'eif'],
+        where: { isActive: true },
+      });
+
+      return {
+        error: false,
+        message: 'Entidades financieras obtenidas correctamente',
+        data: financialEntities,
+      };
+    } catch (error) {
+      return {
+        error: true,
+        message: 'Error al obtener las entidades financieras',
+        data: null,
+      };
+    }
   }
 }
