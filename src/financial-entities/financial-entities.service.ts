@@ -38,11 +38,55 @@ export class FinancialEntitiesService {
     return financialEntity;
   }
 
+  async searchByEif(eif: string): Promise<{
+    error: boolean;
+    message: string;
+    data: Pick<FinancialEntity, 'name' | 'code'> | null;
+  }> {
+    const normalizedEif = eif?.trim().toUpperCase();
+
+    if (!normalizedEif) {
+      return {
+        error: true,
+        message: 'El EIF es requerido',
+        data: null,
+      };
+    }
+
+    try {
+      const financialEntity = await this.financialEntitiesRepository.findOne({
+        select: ['name', 'code'],
+        where: { eif: normalizedEif },
+      });
+
+      if (!financialEntity) {
+        return {
+          error: true,
+          message: `No se encontró una entidad financiera con el EIF ${normalizedEif}`,
+          data: null,
+        };
+      }
+
+      return {
+        error: false,
+        message: 'Entidad financiera obtenida correctamente',
+        data: financialEntity,
+      };
+    } catch {
+      return {
+        error: true,
+        message: 'Error al buscar la entidad financiera por EIF',
+        data: null,
+      };
+    }
+  }
 
   async financialEntities(): Promise<{
     error: boolean;
     message: string;
-    data: Pick<FinancialEntity, 'id' | 'name' | 'code' | 'isActive' | 'eif'>[] | null;
+    data:
+      | Pick<FinancialEntity, 'id' | 'name' | 'code' | 'isActive' | 'eif'>[]
+      | null;
   }> {
     try {
       const financialEntities = await this.financialEntitiesRepository.find({
