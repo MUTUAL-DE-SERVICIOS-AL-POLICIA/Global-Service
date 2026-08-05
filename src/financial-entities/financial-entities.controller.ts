@@ -4,7 +4,6 @@ import { FinancialEntitiesService } from './financial-entities.service';
 
 @Controller()
 export class FinancialEntitiesController {
-  
   constructor(
     private readonly financialEntitiesService: FinancialEntitiesService,
   ) {}
@@ -24,4 +23,8 @@ export class FinancialEntitiesController {
     return this.financialEntitiesService.financialEntities();
   }
 
+  @MessagePattern('financialEntities.searchByEif')
+  searchByEif(@Payload('eif') eif: string) {
+    return this.financialEntitiesService.searchByEif(eif);
+  }
 }
