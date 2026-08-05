@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FinancialEntity } from './entities/financial-entity.entity';
-import { Repository } from 'typeorm';
+import { IsNull, Repository } from 'typeorm';
 import { RpcException } from '@nestjs/microservices';
 
 /**
@@ -38,31 +38,80 @@ export class FinancialEntitiesService {
     return financialEntity;
   }
 
-  async searchByEif(eif: string): Promise<{
+  async searchByColumn(
+    columns: string[],
+    filterColumn: string,
+    value: unknown,
+  ): Promise<{
     error: boolean;
     message: string;
-    data: Pick<FinancialEntity, 'name' | 'code'> | null;
+    data: Partial<FinancialEntity> | null;
   }> {
-    const normalizedEif = eif?.trim().toUpperCase();
-
-    if (!normalizedEif) {
+    if (!Array.isArray(columns) || columns.length === 0) {
       return {
         error: true,
-        message: 'El EIF es requerido',
+        message: 'Debe enviar al menos una columna para devolver',
         data: null,
       };
     }
 
+    const entityColumns = this.financialEntitiesRepository.metadata.columns;
+    const findColumn = (columnName: string) =>
+      entityColumns.find(
+        (column) =>
+          column.propertyName === columnName ||
+          column.databaseName === columnName,
+      );
+    const requestedColumns = [...new Set(columns)];
+    const resolvedColumns = requestedColumns.map((column) =>
+      typeof column === 'string' ? findColumn(column) : undefined,
+    );
+    const invalidColumnIndex = resolvedColumns.findIndex((column) => !column);
+
+    if (invalidColumnIndex >= 0) {
+      return {
+        error: true,
+        message: `La columna ${String(requestedColumns[invalidColumnIndex])} no es válida para devolver`,
+        data: null,
+      };
+    }
+
+    const resolvedFilterColumn =
+      typeof filterColumn === 'string' ? findColumn(filterColumn) : undefined;
+
+    if (!resolvedFilterColumn) {
+      return {
+        error: true,
+        message: `La columna ${String(filterColumn)} no es válida para buscar`,
+        data: null,
+      };
+    }
+
+    if (value === undefined) {
+      return {
+        error: true,
+        message: `El valor para buscar por ${filterColumn} no es válido`,
+        data: null,
+      };
+    }
+
+    const selectedColumns = [
+      ...new Set(resolvedColumns.map((column) => column!.propertyName)),
+    ] as (keyof FinancialEntity)[];
+    const filterProperty = resolvedFilterColumn.propertyName;
+    const comparisonValue = value === null ? IsNull() : value;
+
     try {
       const financialEntity = await this.financialEntitiesRepository.findOne({
-        select: ['name', 'code'],
-        where: { eif: normalizedEif },
+        select: selectedColumns,
+        where: { [filterProperty]: comparisonValue },
+        withDeleted: resolvedFilterColumn.isDeleteDate,
       });
 
       if (!financialEntity) {
         return {
           error: true,
-          message: `No se encontró una entidad financiera con el EIF ${normalizedEif}`,
+          message: `No se encontró una entidad financiera con ${filterColumn} = ${String(value)}`,
           data: null,
         };
       }
@@ -75,7 +124,7 @@ export class FinancialEntitiesService {
     } catch {
       return {
         error: true,
-        message: 'Error al buscar la entidad financiera por EIF',
+        message: 'Error al buscar la entidad financiera',
         data: null,
       };
     }

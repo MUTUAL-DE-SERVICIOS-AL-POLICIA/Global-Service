@@ -23,8 +23,12 @@ export class FinancialEntitiesController {
     return this.financialEntitiesService.financialEntities();
   }
 
-  @MessagePattern('financialEntities.searchByEif')
-  searchByEif(@Payload('eif') eif: string) {
-    return this.financialEntitiesService.searchByEif(eif);
+  @MessagePattern('financialEntities.searchByColumn')
+  searchBy(
+    @Payload('columns') columns: string[],
+    @Payload('filterColumn') filterColumn: string,
+    @Payload('value') value: unknown,
+  ) {
+    return this.financialEntitiesService.searchByColumn(columns, filterColumn, value);
   }
 }
