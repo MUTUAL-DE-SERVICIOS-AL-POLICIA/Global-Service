@@ -1,7 +1,7 @@
-import { Injectable, Logger, NotFoundException, BadRequestException } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { MessagePattern } from '@nestjs/microservices';
+import { RpcException } from '@nestjs/microservices';
 import { ImportConfig } from './entities/import-config.entity';
 import { ImportRecord, ImportStatus } from './entities/import-record.entity';
 
@@ -16,7 +16,6 @@ export class ImportService {
     private readonly recordRepo: Repository<ImportRecord>,
   ) {}
 
-  @MessagePattern('global.initImport')
   async initImport(data: {
     name: string;
     ftpPath: string;
@@ -26,10 +25,10 @@ export class ImportService {
   }) {
     const config = await this.configRepo.findOne({ where: { name: data.name, isActive: true } });
     if (!config) {
-      throw new NotFoundException(
-        `No existe configuración de importación para "${data.name}". ` +
-        `Registre una en la tabla import_configs.`,
-      );
+      throw new RpcException({
+        statusCode: 404,
+        message: `No existe configuración de importación para "${data.name}". Registre una en la tabla import_configs.`,
+      });
     }
 
     if (data.fileHash) {
@@ -41,10 +40,10 @@ export class ImportService {
         },
       });
       if (existing) {
-        throw new BadRequestException(
-          `El archivo "${data.originalFileName}" ya fue importado correctamente el ${existing.createdAt?.toISOString().split('T')[0] || 'fecha desconocida'}.` +
-          ' Si necesita reimportarlo, elimine el registro primero.',
-        );
+        throw new RpcException({
+          statusCode: 400,
+          message: `El archivo "${data.originalFileName}" ya fue importado correctamente el ${existing.createdAt?.toISOString().split('T')[0] || 'fecha desconocida'}. Si necesita reimportarlo, elimine el registro primero.`,
+        });
       }
     }
 
@@ -62,7 +61,6 @@ export class ImportService {
     return { config, record };
   }
 
-  @MessagePattern('global.finalizeImport')
   async finalizeImport(data: {
     id: number;
     status: string;
