@@ -35,10 +35,13 @@ export default class ImportConfigSeed1786459127733 implements Seeder {
         startColumn: 2,
         delimiter: ',',
         columnMappings: [
-          { columnIndex: 2, fieldName: 'date' },
-          { columnIndex: 5, fieldName: 'operationCode' },
-          { columnIndex: 6, fieldName: 'documentNumber' },
-          { columnIndex: 14, fieldName: 'state' },
+          { columnIndex: 1, fieldName: 'date' },
+          { columnIndex: 4, fieldName: 'operationCode' },
+          { columnIndex: 5, fieldName: 'documentNumber' },
+          { columnIndex: 6, fieldName: 'gloss' },
+          { columnIndex: 7, fieldName: 'transferredAccount' },
+          { columnIndex: 9, fieldName: 'credits' },
+          { columnIndex: 12, fieldName: 'state' },
         ],
       },
     ];
