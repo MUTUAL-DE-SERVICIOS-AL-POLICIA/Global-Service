@@ -1,8 +1,17 @@
-import { MigrationInterface, QueryRunner, Table } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table, TableEnum } from 'typeorm';
 
 export class CreateImportTables1786459066093 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query('CREATE SCHEMA IF NOT EXISTS global');
+
+    // Crear enum para status
+    await queryRunner.query(`
+      DO $$ BEGIN
+        CREATE TYPE global.import_records_status_enum AS ENUM ('PENDING', 'PROCESSING', 'COMPLETED', 'FAILED');
+      EXCEPTION
+        WHEN duplicate_object THEN null;
+      END $$;
+    `);
 
     await queryRunner.createTable(
       new Table({
@@ -107,7 +116,14 @@ export class CreateImportTables1786459066093 implements MigrationInterface {
           {
             name: 'uploaded_by',
             type: 'varchar',
-            isNullable: false,
+            isNullable: true,
+          },
+          {
+            name: 'status',
+            type: 'enum',
+            enumName: 'import_records_status_enum',
+            enum: ['PENDING', 'PROCESSING', 'COMPLETED', 'FAILED'],
+            default: "'PENDING'",
           },
           {
             name: 'row_start',
@@ -130,11 +146,6 @@ export class CreateImportTables1786459066093 implements MigrationInterface {
             default: 0,
           },
           {
-            name: 'status',
-            type: 'varchar',
-            default: 'PENDING',
-          },
-          {
             name: 'error_message',
             type: 'text',
             isNullable: true,
@@ -155,7 +166,8 @@ export class CreateImportTables1786459066093 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable('global.import_records');
-    await queryRunner.dropTable('global.import_configs');
+    await queryRunner.query('DROP TABLE IF EXISTS global.import_records');
+    await queryRunner.query('DROP TABLE IF EXISTS global.import_configs');
+    await queryRunner.query('DROP TYPE IF EXISTS global.import_records_status_enum');
   }
 }
