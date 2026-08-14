@@ -1,4 +1,4 @@
-import { MigrationInterface, QueryRunner, Table, TableEnum } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class CreateImportTables1786459066093 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
