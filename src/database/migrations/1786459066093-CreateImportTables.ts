@@ -62,7 +62,7 @@ export class CreateImportTables1786459066093 implements MigrationInterface {
           {
             name: 'delimiter',
             type: 'varchar',
-            default: ',',
+            default: "','",
           },
           {
             name: 'is_active',
