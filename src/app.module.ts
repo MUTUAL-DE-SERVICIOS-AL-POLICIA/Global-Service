@@ -14,7 +14,6 @@ import { DatabaseModule } from './database/database.module';
 import { FileDossiersModule } from './file-dossiers/file-dossiers.module';
 import { RetirementFundAveragesModule } from './retirement-fund-averages/retirement-fund-averages.module';
 import { AccountModule } from './account/account.module';
-import { ImportModule } from './import/import.module';
 
 @Module({
   imports: [
@@ -33,7 +32,6 @@ import { ImportModule } from './import/import.module';
     FileDossiersModule,
     RetirementFundAveragesModule,
     AccountModule,
-    ImportModule,
   ],
 })
 export class AppModule {}
