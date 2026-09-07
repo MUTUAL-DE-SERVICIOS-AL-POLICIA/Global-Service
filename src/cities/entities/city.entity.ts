@@ -20,10 +20,10 @@ export class City {
   @Column()
   toBank?: string;
 
-  @Column({ type: 'numeric', precision: 10, scale: 2 })
+  @Column({ type: 'numeric', precision: 10, scale: 7 })
   latitude?: number;
 
-  @Column()
+  @Column({ type: 'numeric', precision: 10, scale: 7 })
   longitude?: number;
 
   @Column()
