@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FinancialEntity } from './entities/financial-entity.entity';
-import { Repository } from 'typeorm';
+import { IsNull, Repository } from 'typeorm';
 import { RpcException } from '@nestjs/microservices';
 
 /**
@@ -20,24 +20,12 @@ export class FinancialEntitiesService {
     private readonly financialEntitiesRepository: Repository<FinancialEntity>,
   ) {}
 
-  /**
-   * Busca y devuelve una lista de todas las Entidades Financieras disponibles.
-   * Selecciona solo los campos 'id' y 'name'.
-   * @returns Una promesa que resuelve con un array de objetos FinancialEntity con solo los campos 'id' y 'name'.
-   */
   async findAll(): Promise<Partial<FinancialEntity>[]> {
     return this.financialEntitiesRepository.find({
       select: ['id', 'name'],
     });
   }
 
-  /**
-   * Busca y devuelve una Entidad Financiera específica por su ID.
-   * Si la entidad financiera no es encontrada, lanza una excepción RpcException(codigo 404).
-   * @param id El ID numérico de la Entidad Financiera a buscar.
-   * @returns Una promesa que resuelve con el objeto FinancialEntity completo si es encontrado.
-   * @throws RpcException Si no se encuentra una Entidad Financiera con el ID proporcionado (código 404).
-   */
   async findOne(id: number): Promise<FinancialEntity> {
     const financialEntity = await this.financialEntitiesRepository.findOneBy({
       id,
@@ -48,5 +36,124 @@ export class FinancialEntitiesService {
         code: 404,
       });
     return financialEntity;
+  }
+
+  async searchByColumn(
+    columns: string[],
+    filterColumn: string,
+    value: unknown,
+  ): Promise<{
+    error: boolean;
+    message: string;
+    data: Partial<FinancialEntity> | null;
+  }> {
+    if (!Array.isArray(columns) || columns.length === 0) {
+      return {
+        error: true,
+        message: 'Debe enviar al menos una columna para devolver',
+        data: null,
+      };
+    }
+
+    const entityColumns = this.financialEntitiesRepository.metadata.columns;
+    const findColumn = (columnName: string) =>
+      entityColumns.find(
+        (column) =>
+          column.propertyName === columnName ||
+          column.databaseName === columnName,
+      );
+    const requestedColumns = [...new Set(columns)];
+    const resolvedColumns = requestedColumns.map((column) =>
+      typeof column === 'string' ? findColumn(column) : undefined,
+    );
+    const invalidColumnIndex = resolvedColumns.findIndex((column) => !column);
+
+    if (invalidColumnIndex >= 0) {
+      return {
+        error: true,
+        message: `La columna ${String(requestedColumns[invalidColumnIndex])} no es válida para devolver`,
+        data: null,
+      };
+    }
+
+    const resolvedFilterColumn =
+      typeof filterColumn === 'string' ? findColumn(filterColumn) : undefined;
+
+    if (!resolvedFilterColumn) {
+      return {
+        error: true,
+        message: `La columna ${String(filterColumn)} no es válida para buscar`,
+        data: null,
+      };
+    }
+
+    if (value === undefined) {
+      return {
+        error: true,
+        message: `El valor para buscar por ${filterColumn} no es válido`,
+        data: null,
+      };
+    }
+
+    const selectedColumns = [
+      ...new Set(resolvedColumns.map((column) => column!.propertyName)),
+    ] as (keyof FinancialEntity)[];
+    const filterProperty = resolvedFilterColumn.propertyName;
+    const comparisonValue = value === null ? IsNull() : value;
+
+    try {
+      const financialEntity = await this.financialEntitiesRepository.findOne({
+        select: selectedColumns,
+        where: { [filterProperty]: comparisonValue },
+        withDeleted: resolvedFilterColumn.isDeleteDate,
+      });
+
+      if (!financialEntity) {
+        return {
+          error: true,
+          message: `No se encontró una entidad financiera con ${filterColumn} = ${String(value)}`,
+          data: null,
+        };
+      }
+
+      return {
+        error: false,
+        message: 'Entidad financiera obtenida correctamente',
+        data: financialEntity,
+      };
+    } catch {
+      return {
+        error: true,
+        message: 'Error al buscar la entidad financiera',
+        data: null,
+      };
+    }
+  }
+
+  async financialEntities(): Promise<{
+    error: boolean;
+    message: string;
+    data:
+      | Pick<FinancialEntity, 'id' | 'name' | 'code' | 'isActive' | 'eif'>[]
+      | null;
+  }> {
+    try {
+      const financialEntities = await this.financialEntitiesRepository.find({
+        select: ['id', 'name', 'code', 'isActive', 'eif'],
+        where: { isActive: true },
+      });
+
+      return {
+        error: false,
+        message: 'Entidades financieras obtenidas correctamente',
+        data: financialEntities,
+      };
+    } catch (error) {
+      return {
+        error: true,
+        message: 'Error al obtener las entidades financieras',
+        data: null,
+      };
+    }
   }
 }
