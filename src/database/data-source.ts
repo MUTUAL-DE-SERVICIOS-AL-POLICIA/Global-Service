@@ -3,6 +3,12 @@ import { SeederOptions } from 'typeorm-extension';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import { DbEnvs } from 'src/config';
 
+export const databaseSchema = DbEnvs.dbSchema;
+
+export function quoteIdentifier(identifier: string): string {
+  return `"${identifier.replace(/"/g, '""')}"`;
+}
+
 export const options: DataSourceOptions & SeederOptions = {
   type: 'postgres' as const,
   host: DbEnvs.dbHost,
@@ -14,11 +20,41 @@ export const options: DataSourceOptions & SeederOptions = {
   entities: [__dirname + '/../**/*.entity{.ts,.js}'],
   namingStrategy: new SnakeNamingStrategy(),
 
-  seeds: ['src/database/seeds/**/*{.ts,.js}'],
+  seeds: [__dirname + '/seeds/**/*{.ts,.js}'],
   seedTracking: true,
 
-  schema: DbEnvs.dbSchema,
-  migrations: ['dist/database/migrations/**/*{.ts,.js}'],
+  schema: databaseSchema,
+  migrations: [__dirname + '/migrations/**/*{.ts,.js}'],
 };
 
-export default new DataSource(options);
+export async function ensureDatabaseSchema(
+  dataSourceOptions: DataSourceOptions = options,
+): Promise<void> {
+  const bootstrap = new DataSource({
+    ...dataSourceOptions,
+    synchronize: false,
+    migrationsRun: false,
+    dropSchema: false,
+    entities: [],
+    migrations: [],
+    subscribers: [],
+  });
+
+  await bootstrap.initialize();
+  try {
+    await bootstrap.query(
+      `CREATE SCHEMA IF NOT EXISTS ${quoteIdentifier(databaseSchema)}`,
+    );
+  } finally {
+    await bootstrap.destroy();
+  }
+}
+
+export class SchemaAwareDataSource extends DataSource {
+  override async initialize(): Promise<this> {
+    await ensureDatabaseSchema(this.options);
+    return super.initialize();
+  }
+}
+
+export default new SchemaAwareDataSource(options);

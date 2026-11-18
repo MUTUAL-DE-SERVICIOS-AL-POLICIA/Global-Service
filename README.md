@@ -1,38 +1,81 @@
-## Descripción 
+# Global-Service
 
-Microservicio de obtención de información de Tablas Globales
+Microservicio NestJS para datos globales de la plataforma. Usa PostgreSQL,
+TypeORM, NATS y `pnpm`.
 
-## Instalar dependencias necesarias después de clonar el repositorio
-
-```bash
-$ yarn install
-```
-## Configurar las variables de entorno
+## Inicio rapido
 
 ```bash
-$ cp .env.example .env
+cp .env.template .env
+pnpm install
+pnpm start:dev
 ```
 
-## Pata correr el microservicio
+## Variables principales
+
+Configura el archivo `.env` antes de iniciar el servicio.
+
+```env
+NATS_SERVERS=nats://localhost:4222
+DB_HOST=localhost
+DB_PORT=5432
+DB_USERNAME=postgres
+DB_PASSWORD=postgres
+DB_DATABASE=procedures_services
+DB_SCHEMA=global
+DB_SYNCHRONIZE=false
+```
+
+## Migraciones
 
 ```bash
-# development
-$ yarn run start
-
-# watch mode
-$ yarn run start:dev
-
-# production mode
-$ yarn run start:prod
+pnpm migration:show
+pnpm migration:run
+pnpm migration:revert
 ```
 
-# Para generar la Documentacion de TSDoc a HTML
+El esquema usado por defecto es `global`, definido en `DB_SCHEMA`.
 
-## con TypeDoc busca y genera en base a las etiquetas TsDoc un html
+## Seeders
 
-### usar el siguiente comando para generarlo y se creara un archivo Doc entrar y abrir el index.html para ver la documentacion de Global Service (solo de controladores servicios y dto's por el momento)
+Ejecutar todos los seeders pendientes:
 
-### en caso de cambiar modicar parametros de la generacion de TypeDoc modificar el archivo typedoc.json
-```sh
-yarn docs
+```bash
+pnpm seed:run
+```
+
+Ejecutar un seeder especifico:
+
+```bash
+pnpm seed:run -- --name src/database/seeds/1782244316611-accounts-seeder-bcb.ts
+```
+
+Crear un seeder nuevo:
+
+```bash
+pnpm seed:create --name src/database/seeds/nombre-del-seed
+```
+
+## Comandos utiles
+
+```bash
+pnpm start:dev
+pnpm build
+pnpm test
+pnpm lint
+```
+
+## Generar recursos NestJS
+
+```bash
+nest g res nombreModulo
+```
+
+## Flujo recomendado
+
+```bash
+pnpm install
+pnpm migration:run
+pnpm seed:run
+pnpm start:dev
 ```
